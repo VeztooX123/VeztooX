@@ -6,7 +6,7 @@
 <title>VeztooX – Fresh Sabzi & Fruits | Muzaffarnagar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<script src="prices.js"></script>
 <style>
   :root {
     --green:#1a7a3a;--green-light:#2da84f;--green-pale:#e8f5ec;
@@ -396,7 +396,18 @@ function goBack(){
 if(sessionStorage.getItem('mzn')==='yes') document.getElementById('mznOverlay').style.display='none';
 
 // LOAD PRICES
-
+function loadPrices(){
+  try{
+    const p=VEZTOOX_PRICES;
+    document.getElementById('priceBar').innerHTML=`📅 Aaj ke prices — <strong>${p.lastUpdated}</strong> &nbsp;|&nbsp; Roz subah mandi se update hote hain 🌿`;
+    document.getElementById('priceDate').textContent=p.lastUpdated;
+    const m={'p-tamatar':p.tamatar,'p-aloo':p.aloo,'p-pyaz':p.pyaz,'p-gajar':p.gajar,'p-matar':p.matar,'p-kheera':p.kheera,'p-baingan':p.baingan,'p-hariMirch':p.hariMirch,'p-kela':p.kela,'p-seb':p.seb,'p-nimbu':p.nimbu,'p-angur':p.angur,'p-dhaniya':p.dhaniya,'p-palak':p.palak,'p-methi':p.methi,'p-pudina':p.pudina};
+    for(const[id,val] of Object.entries(m)){const el=document.getElementById(id);if(el&&val)el.textContent=val;}
+  }catch(e){
+    document.getElementById('priceBar').innerHTML='📅 Aaj ke prices — WhatsApp par poochh sakte hain!';
+  }
+}
+loadPrices();
 
 // FILTER
 function filterCat(cat,el){
@@ -410,51 +421,8 @@ function filterCat(cat,el){
 // SCROLL ANIM
 const obs=new IntersectionObserver(entries=>{
   entries.forEach((e,i)=>{if(e.isIntersecting){e.target.style.animation=`fadeUp 0.45s ease ${i*.05}s both`;obs.unobserve(e.target);}});
-},{threshold:.1});  
+},{threshold:.1});
 document.querySelectorAll('.pc,.how-card,.wc,.rc').forEach(el=>obs.observe(el));
 </script>
-<script>
-async function loadPrices(){          
-  try{
-    const res = await fetch('prices.json?nocache=' + Date.now());
-    const p = await res.json();
-
-    // Date
-    const dateEl = document.getElementById('priceDate');
-    if(dateEl) dateEl.textContent = p.lastUpdated;
-
-    // Prices map
-    const m = {
-      'p-tamatar':p.tamatar,
-      'p-aloo':p.aloo,
-      'p-pyaz':p.pyaz,
-      'p-gajar':p.gajar,
-      'p-matar':p.matar,
-      'p-kheera':p.kheera,
-      'p-baingan':p.baingan,
-      'p-hariMirch':p.hariMirch,
-      'p-kela':p.kela,
-      'p-seb':p.seb,
-      'p-nimbu':p.nimbu,
-      'p-angur':p.angur,
-      'p-dhaniya':p.dhaniya,
-      'p-palak':p.palak,
-      'p-methi':p.methi,
-      'p-pudina':p.pudina
-    };
-
-    for(const [id,val] of Object.entries(m)){
-      const el = document.getElementById(id);
-      if(el && val) el.textContent = val;
-    }
-
-  }catch(e){
-    console.log("Price load error", e);
-  }
-}
-
-loadPrices();
-</script>
-  
 </body>
 </html>
