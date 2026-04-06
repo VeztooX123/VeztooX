@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VeztooX – Fresh Sabzi & Fruits | Muzaffarnagar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="prices.js"></script>
+<style>
+  :root {
+    --green:#1a7a3a;--green-light:#2da84f;--green-pale:#e8f5ec;
+    --orange:#f47c20;--yellow:#ffd94a;--cream:#fdf8f0;
+    --dark:#1a1a0e;--text:#2d2d1e;--muted:#7a7a60;
+    --wa:#25D366;--wa-dark:#128C7E;--white:#ffffff;
+    --radius:20px;--shadow:0 8px 32px rgba(26,122,58,0.12);
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+
+  /* POPUP */
+  .mzn-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);}
+  .mzn-popup{background:#fff;border-radius:24px;padding:36px 28px;max-width:400px;width:100%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.3);animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both;}
+  .mzn-popup .pin{font-size:3.5rem;margin-bottom:12px;}
+  .mzn-popup h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--dark);margin-bottom:10px;}
+  .mzn-popup p{color:var(--muted);font-size:.93rem;line-height:1.7;margin-bottom:20px;}
+  .area-badge{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;padding:8px 20px;border-radius:50px;font-weight:700;font-size:.9rem;margin-bottom:18px;}
+  .mzn-yes{background:var(--green);color:#fff;border:none;padding:13px 0;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;margin-bottom:10px;transition:background .2s;}
+  .mzn-yes:hover{background:var(--green-light);}
+  .mzn-no{background:none;border:2px solid #ddd;color:var(--muted);padding:11px 0;border-radius:50px;font-size:.9rem;font-weight:600;cursor:pointer;width:100%;transition:all .2s;}
+  .mzn-no:hover{border-color:var(--orange);color:var(--orange);}
+  .outside-msg{display:none;position:fixed;inset:0;z-index:9999;background:var(--orange);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
+  .outside-msg.show{display:flex;}
+  .outside-msg h2{font-family:'Playfair Display',serif;font-size:2rem;color:#fff;margin:16px 0 12px;}
+  .outside-msg p{color:rgba(255,255,255,.85);font-size:1rem;line-height:1.7;max-width:380px;}
+  .outside-back{margin-top:24px;background:#fff;color:var(--orange);border:none;padding:12px 28px;border-radius:50px;font-weight:700;cursor:pointer;font-size:.95rem;}
+
+  /* BANNERS */
+  .delivery-banner{background:linear-gradient(90deg,var(--green),#256b3a);color:#fff;text-align:center;padding:10px 20px;font-size:.88rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;}
+  .delivery-banner span{background:var(--yellow);color:var(--dark);padding:2px 10px;border-radius:50px;font-size:.8rem;}
+  .price-bar{background:var(--orange);color:#fff;text-align:center;padding:9px 20px;font-size:.85rem;font-weight:500;}
+  .price-bar strong{font-weight:800;}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(253,248,240,.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(26,122,58,.1);}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;color:var(--green);letter-spacing:-1px;}
+  .nav-logo span{color:var(--orange);}
+  .nav-links{display:flex;gap:24px;list-style:none;}
+  .nav-links a{color:var(--text);text-decoration:none;font-size:.92rem;font-weight:500;transition:color .2s;}
+  .nav-links a:hover{color:var(--green);}
+  .nav-wa{background:var(--wa);color:#fff;padding:9px 18px;border-radius:50px;text-decoration:none;font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:6px;transition:background .2s;white-space:nowrap;}
+  .nav-wa:hover{background:var(--wa-dark);}
+  @media(max-width:600px){.nav-links{display:none;}}
+
+  /* HERO */
+  .hero{min-height:92vh;display:grid;place-items:center;padding:60px 24px;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 0%,#d4f0da 0%,var(--cream) 70%);}
+  .hero-bg{position:absolute;top:-80px;right:-120px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,#f47c2022,transparent 70%);pointer-events:none;}
+  .hero-content{max-width:720px;text-align:center;position:relative;animation:fadeUp .9s ease both;}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;font-size:.78rem;font-weight:600;letter-spacing:1.2px;padding:6px 16px;border-radius:50px;margin-bottom:24px;text-transform:uppercase;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--yellow);animation:pulse 1.5s infinite;display:inline-block;}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,7vw,4.2rem);font-weight:900;line-height:1.1;color:var(--dark);margin-bottom:18px;}
+  .hero h1 em{color:var(--green);font-style:normal;}
+  .hero h1 .acc{color:var(--orange);}
+  .hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto 32px;}
+  .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .btn-p{background:var(--wa);color:#fff;padding:14px 30px;border-radius:50px;text-decoration:none;font-weight:700;font-size:1rem;display:flex;align-items:center;gap:9px;box-shadow:0 6px 24px rgba(37,211,102,.35);transition:transform .2s;}
+  .btn-p:hover{transform:translateY(-3px);}
+  .btn-s{background:#fff;color:var(--green);padding:14px 30px;border-radius:50px;text-decoration:none;font-weight:600;font-size:1rem;border:2px solid var(--green);transition:background .2s,color .2s;}
+  .btn-s:hover{background:var(--green);color:#fff;}
+  .hero-stats{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;margin-top:44px;padding-top:28px;border-top:1px solid rgba(26,122,58,.12);}
+  .stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--green);}
+  .stat-lbl{font-size:.82rem;color:var(--muted);font-weight:500;}
+
+  /* MARQUEE */
+  .marquee-wrap{background:var(--green);padding:13px 0;overflow:hidden;}
+  .marquee-track{display:flex;animation:marquee 20s linear infinite;white-space:nowrap;}
+  .m-item{color:#fff;font-weight:600;font-size:.9rem;padding:0 22px;display:inline-flex;align-items:center;gap:9px;}
+  .m-dot{color:var(--yellow);}
+
+  /* COMMON */
+  section{padding:72px 24px;}
+  .sec-lbl{font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;}
+  .sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,4vw,2.7rem);font-weight:900;color:var(--dark);line-height:1.2;margin-bottom:14px;}
+  .sec-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:500px;}
+  .container{max-width:1100px;margin:0 auto;}
+
+  /* HOW */
+  .how{background:#fff;}
+  .how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-top:44px;}
+  .how-card{background:var(--cream);border-radius:var(--radius);padding:28px;border:1px solid rgba(26,122,58,.08);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden;}
+  .how-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);}
+  .how-num{font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;color:rgba(26,122,58,.07);position:absolute;top:6px;right:14px;line-height:1;}
+  .how-icon{font-size:2.2rem;margin-bottom:14px;}
+  .how-card h3{font-size:1.05rem;font-weight:700;color:var(--dark);margin-bottom:8px;}
+  .how-card p{font-size:.88rem;color:var(--muted);line-height:1.6;}
+
+  /* PRODUCTS */
+  .products{background:var(--cream);}
+  .price-box{background:#fff;border-radius:16px;border:2px solid var(--green);padding:16px 22px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .price-box .pb-left{display:flex;align-items:center;gap:12px;}
+  .price-box h4{font-size:1rem;font-weight:700;color:var(--dark);}
+  .price-box p{font-size:.83rem;color:var(--muted);}
+  .date-tag{background:var(--green-pale);color:var(--green);padding:6px 14px;border-radius:50px;font-size:.82rem;font-weight:700;}
+  .tabs{display:flex;gap:10px;margin:0 0 24px;flex-wrap:wrap;}
+  .tab{padding:9px 20px;border-radius:50px;cursor:pointer;border:2px solid rgba(0,0,0,.08);font-weight:600;font-size:.88rem;transition:all .2s;background:#fff;color:var(--muted);}
+  .tab.active{background:var(--green);color:#fff;border-color:var(--green);}
+  .tab:hover:not(.active){border-color:var(--green);color:var(--green);}
+  .prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:18px;}
+  .pc{background:#fff;border-radius:18px;padding:20px 16px;text-align:center;border:1px solid rgba(0,0,0,.06);transition:transform .22s,box-shadow .22s;}
+  .pc:hover{transform:translateY(-5px);box-shadow:0 8px 28px rgba(26,122,58,.12);}
+  .pc .em{font-size:3rem;margin-bottom:10px;display:block;}
+  .pc .nm{font-weight:700;color:var(--dark);font-size:.93rem;margin-bottom:3px;}
+  .pc .hi{font-size:.8rem;color:var(--muted);margin-bottom:10px;}
+  .pc .pr{background:var(--green-pale);color:var(--green);padding:5px 12px;border-radius:50px;font-size:.8rem;font-weight:700;display:inline-block;}
+  .pc .ob{display:block;width:100%;background:var(--wa);color:#fff;padding:9px 0;border-radius:10px;text-decoration:none;font-size:.8rem;font-weight:600;margin-top:11px;transition:background .2s;}
+  .pc .ob:hover{background:var(--wa-dark);}
+  .pc.hidden{display:none;}
+
+  /* AREA */
+  .area-sec{background:#fff;padding:60px 24px;}
+  .area-box{max-width:680px;margin:0 auto;text-align:center;}
+  .area-visual{background:var(--cream);border-radius:20px;border:2px dashed var(--green);padding:32px;margin:28px 0 20px;}
+  .area-visual .big-pin{font-size:3.5rem;}
+  .area-visual h3{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--green);margin:8px 0 4px;}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:14px;}
+  .chip{background:var(--green-pale);color:var(--green);padding:6px 14px;border-radius:50px;font-size:.83rem;font-weight:600;}
+  .area-note{font-size:.88rem;color:var(--muted);margin-top:12px;line-height:1.6;}
+
+  /* WHY */
+  .why{background:var(--green);}
+  .why .sec-title{color:#fff;}
+  .why .sec-lbl{color:var(--yellow);}
+  .why .sec-sub{color:rgba(255,255,255,.75);}
+  .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:44px;}
+  .wc{background:rgba(255,255,255,.1);border-radius:var(--radius);padding:26px 22px;border:1px solid rgba(255,255,255,.15);}
+  .wc .wi{font-size:2.1rem;margin-bottom:12px;}
+  .wc h3{color:#fff;font-size:1.02rem;font-weight:700;margin-bottom:7px;}
+  .wc p{color:rgba(255,255,255,.7);font-size:.88rem;line-height:1.6;}
+
+  /* REVIEWS */
+  .reviews{background:#fff;}
+  .rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px;margin-top:44px;}
+  .rc{background:var(--cream);border-radius:var(--radius);padding:26px;border:1px solid rgba(26,122,58,.08);}
+  .stars{color:var(--orange);font-size:1.1rem;margin-bottom:12px;}
+  .rt{font-size:.93rem;color:var(--text);line-height:1.7;margin-bottom:14px;font-style:italic;}
+  .rv{display:flex;align-items:center;gap:10px;}
+  .rav{width:40px;height:40px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;}
+  .rnm{font-weight:700;font-size:.88rem;color:var(--dark);}
+  .rlc{font-size:.78rem;color:var(--muted);}
+
+  /* CTA */
+  .cta{background:linear-gradient(135deg,var(--orange),#e06010);text-align:center;padding:72px 24px;}
+  .cta h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);font-weight:900;color:#fff;margin-bottom:14px;}
+  .cta p{color:rgba(255,255,255,.85);font-size:1.05rem;margin-bottom:30px;line-height:1.7;}
+  .cta-wa{display:inline-flex;align-items:center;gap:12px;background:#fff;color:var(--green);padding:15px 34px;border-radius:50px;text-decoration:none;font-weight:800;font-size:1.05rem;box-shadow:0 8px 32px rgba(0,0,0,.15);transition:transform .2s;}
+  .cta-wa:hover{transform:translateY(-4px);}
+  .cta-wa .wi{background:var(--wa);color:#fff;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;}
+
+  /* FOOTER */
+  footer{background:var(--dark);color:rgba(255,255,255,.75);padding:56px 24px 28px;}
+  .fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:36px;}
+  .fb .nav-logo{font-size:1.9rem;display:inline-block;margin-bottom:12px;}
+  .fb p{font-size:.88rem;line-height:1.7;max-width:270px;color:rgba(255,255,255,.6);}
+  .fc h4{color:#fff;font-weight:700;margin-bottom:14px;font-size:.93rem;}
+  .fc ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .fc ul a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.88rem;transition:color .2s;}
+  .fc ul a:hover{color:var(--green-light);}
+  .fb2{max-width:1100px;margin:36px auto 0;padding-top:22px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:.8rem;color:rgba(255,255,255,.4);}
+  @media(max-width:680px){.fg{grid-template-columns:1fr;gap:24px;}}
+
+  /* FLOAT WA */
+  .fwa{position:fixed;bottom:26px;right:22px;z-index:500;width:58px;height:58px;border-radius:50%;background:var(--wa);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.7rem;text-decoration:none;box-shadow:0 6px 24px rgba(37,211,102,.5);animation:waF 3s ease-in-out infinite;}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @keyframes waF{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  @keyframes popIn{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+</style>
+</head>
+<body>
+
+<!-- POPUP -->
+<div class="mzn-overlay" id="mznOverlay">
+  <div class="mzn-popup">
+    <div class="pin">📍</div>
+    <h2>Delivery Area Check</h2>
+    <p>VeztooX abhi sirf <strong>Muzaffarnagar</strong> mein deliver karta hai.<br>Kya aap Muzaffarnagar mein hain?</p>
+    <div class="area-badge">🏙️ Sirf Muzaffarnagar, UP</div><br>
+    <button class="mzn-yes" onclick="confirmArea(true)">✅ Haan, Main Muzaffarnagar Mein Hoon</button>
+    <button class="mzn-no" onclick="confirmArea(false)">❌ Nahi, Main Kahin Aur Hoon</button>
+  </div>
+</div>
+
+<div class="outside-msg" id="outsideMsg">
+  <div style="font-size:3rem">😔</div>
+  <h2>Abhi Available Nahi</h2>
+  <p>Hum abhi sirf Muzaffarnagar mein deliver karte hain. Jald hi aapke shehar mein bhi aayenge! Agar Muzaffarnagar mein koi jaanta ho, unhe zaroor batana. 🙏</p>
+  <button class="outside-back" onclick="goBack()">← Wapas Jao</button>
+</div>
+
+<!-- BANNERS -->
+<div class="delivery-banner">
+  🚚 Sirf Muzaffarnagar Delivery &nbsp;|&nbsp; Roz Subah Fresh Mandi Stock
+  <span>📍 Only Muzaffarnagar</span>
+</div>
+<div class="price-bar" id="priceBar">📅 Aaj ke prices load ho rahe hain...</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Veztoo<span>X</span></div>
+  <ul class="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#area">Delivery Area</a></li>
+    <li><a href="#how">How it Works</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+  </ul>
+  <a class="nav-wa" href="https://wa.me/917409001208?text=Hello%20VeztooX!%20Order%20karna%20hai." target="_blank">💬 Order on WhatsApp</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> 📍 Sirf Muzaffarnagar Delivery</div>
+    <h1><em>Taazi Sabzi</em> &amp;<br><span class="acc">Fresh Fruits</span><br>Ghar Pe Aayegi</h1>
+    <p class="hero-sub">Mandi se seedha aapke ghar tak — roz subah ki taazi sabzi aur meethe fruits, sirf ek WhatsApp message par. <strong>VeztooX</strong> ke saath khareedna hua aasaan.</p>
+    <div class="hero-btns">
+      <a class="btn-p" href="https://wa.me/917409001208?text=Hello%20VeztooX!%20Order%20karna%20hai." target="_blank">💬 WhatsApp Par Order Karo</a>
+      <a class="btn-s" href="#products">Aaj Ke Prices Dekho</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Happy Customers</div></div>
+      <div class="stat"><div class="stat-num">50+</div><div class="stat-lbl">Products</div></div>
+      <div class="stat"><div class="stat-num">Daily</div><div class="stat-lbl">Mandi Fresh Stock</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-lbl">Fresh Guarantee</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="m-item">🍅 Tamatar <span class="m-dot">✦</span></span><span class="m-item">🥔 Aloo <span class="m-dot">✦</span></span><span class="m-item">🧅 Pyaz <span class="m-dot">✦</span></span><span class="m-item">🥕 Gajar <span class="m-dot">✦</span></span><span class="m-item">🍋 Nimbu <span class="m-dot">✦</span></span><span class="m-item">🥭 Aam <span class="m-dot">✦</span></span><span class="m-item">🍌 Kela <span class="m-dot">✦</span></span><span class="m-item">🍎 Seb <span class="m-dot">✦</span></span><span class="m-item">🫛 Matar <span class="m-dot">✦</span></span><span class="m-item">🌿 Dhaniya <span class="m-dot">✦</span></span><span class="m-item">🥒 Kheera <span class="m-dot">✦</span></span><span class="m-item">🍇 Angur <span class="m-dot">✦</span></span>
+    <span class="m-item">🍅 Tamatar <span class="m-dot">✦</span></span><span class="m-item">🥔 Aloo <span class="m-dot">✦</span></span><span class="m-item">🧅 Pyaz <span class="m-dot">✦</span></span><span class="m-item">🥕 Gajar <span class="m-dot">✦</span></span><span class="m-item">🍋 Nimbu <span class="m-dot">✦</span></span><span class="m-item">🥭 Aam <span class="m-dot">✦</span></span><span class="m-item">🍌 Kela <span class="m-dot">✦</span></span><span class="m-item">🍎 Seb <span class="m-dot">✦</span></span><span class="m-item">🫛 Matar <span class="m-dot">✦</span></span><span class="m-item">🌿 Dhaniya <span class="m-dot">✦</span></span><span class="m-item">🥒 Kheera <span class="m-dot">✦</span></span><span class="m-item">🍇 Angur <span class="m-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- DELIVERY AREA -->
+<section class="area-sec" id="area">
+  <div class="area-box">
+    <div class="sec-lbl">Delivery Zone</div>
+    <div class="sec-title">Hum Kahan Deliver Karte Hain?</div>
+    <div class="area-visual">
+      <div class="big-pin">📍</div>
+      <h3>Muzaffarnagar, UP</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:4px;">Abhi ke liye sirf Muzaffarnagar city area</p>
+      <div class="chips">
+        <span class="chip">🏘️ Civil Lines</span><span class="chip">🏘️ Shastri Nagar</span><span class="chip">🏘️ Mahavir Colony</span><span class="chip">🏘️ Ghanta Ghar</span><span class="chip">🏘️ Jansath Road</span><span class="chip">🏘️ Budhana Road</span><span class="chip">🏘️ Meenakshi Puram</span><span class="chip">+ Aur bhi areas</span>
+      </div>
+    </div>
+    <p class="area-note">⚠️ Abhi hum sirf Muzaffarnagar city mein deliver karte hain. Apna area confirm karne ke liye WhatsApp karo!</p>
+    <a href="https://wa.me/917409001208?text=Kya%20aap%20mere%20area%20mein%20deliver%20karte%20ho?" target="_blank" style="display:inline-block;margin-top:16px;background:var(--green);color:#fff;padding:11px 24px;border-radius:50px;text-decoration:none;font-weight:600;font-size:.9rem;">💬 Apna Area Check Karo</a>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="sec-lbl">Simple Process</div>
+    <div class="sec-title">Sirf 3 Steps Mein<br>Ghar Pe Delivery</div>
+    <p class="sec-sub">Koi app nahi, koi login nahi — bas WhatsApp karo.</p>
+    <div class="how-grid">
+      <div class="how-card"><div class="how-num">1</div><div class="how-icon">💬</div><h3>WhatsApp Karo</h3><p>Apni list bhejo — "Aloo 2kg, Tamatar 1kg" — itna kaafi hai.</p></div>
+      <div class="how-card"><div class="how-num">2</div><div class="how-icon">✅</div><h3>Price Confirm Karo</h3><p>Hum aaj ka fresh rate bata denge. Confirm karo, order set.</p></div>
+      <div class="how-card"><div class="how-num">3</div><div class="how-icon">🚚</div><h3>Delivery Paao</h3><p>Mandi se seedha ghar tak. Fresh, saaf, correct weight.</p></div>
+      <div class="how-card"><div class="how-num">4</div><div class="how-icon">💰</div><h3>Cash / UPI</h3><p>Delivery pe payment — UPI ya cash. Koi advance nahi.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="container">
+    <div class="sec-lbl">Aaj Ka Stock</div>
+    <div class="sec-title">Hamare Products</div>
+    <p class="sec-sub">Neeche ke prices aaj ke hain — mandi se fresh aaye hain.</p>
+
+    <div class="price-box">
+      <div class="pb-left">
+        <div style="font-size:1.8rem">🕐</div>
+        <div><h4>Aaj Ke Live Prices</h4><p>Roz subah mandi ke baad update hote hain</p></div>
+      </div>
+      <div class="date-tag" id="priceDate">Loading...</div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="filterCat('all',this)">🛒 Sab</div>
+      <div class="tab" onclick="filterCat('sabzi',this)">🥦 Sabziyan</div>
+      <div class="tab" onclick="filterCat('fruit',this)">🍎 Fruits</div>
+      <div class="tab" onclick="filterCat('leafy',this)">🌿 Hara</div>
+    </div>
+
+    <div class="prod-grid" id="productGrid">
+      <div class="pc" data-cat="sabzi"><span class="em">🍅</span><div class="nm">Tomato / टमाटर</div><div class="pr" id="p-tamatar">…</div><a class="ob" href="https://wa.me/917409001208?text=Tamatar%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="sabzi"><span class="em">🥔</span><div class="nm">Potato / आलू</div><div class="pr" id="p-aloo">…</div><a class="ob" href="https://wa.me/917409001208?text=Aloo%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="sabzi"><span class="em">🧅</span><div class="nm">Onion / प्याज</div><div class="pr" id="p-pyaz">…</div><a class="ob" href="https://wa.me/917409001208?text=Pyaz%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="sabzi"><span class="em">🥕</span><div class="nm">Carrot / गाजर</div><div class="pr" id="p-gajar">…</div><a class="ob" href="https://wa.me/917409001208?text=Gajar%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="sabzi"><span class="em">🫛</span><div class="nm">Peas / मटर</div><div class="pr" id="p-matar">…</div><a class="ob" href="https://wa.me/917409001208?text=Matar%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="sabzi"><span class="em">🥒</span><div class="nm">Cucumber / खीरा</div><div class="pr" id="p-kheera">…</div><a class="ob" href="https://wa.me/917409001208?text=Kheera%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="sabzi"><span class="em">🍆</span><div class="nm">Brinjal / बैंगन</div><div class="pr" id="p-baingan">…</div><a class="ob" href="https://wa.me/917409001208?text=Baingan%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="sabzi"><span class="em">🌶️</span><div class="nm">Chilli / हरी मिर्च</div><div class="pr" id="p-hariMirch">…</div><a class="ob" href="https://wa.me/917409001208?text=Hari%20Mirch%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="fruit"><span class="em">🍌</span><div class="nm">Banana / केला</div><div class="pr" id="p-kela">…</div><a class="ob" href="https://wa.me/917409001208?text=Kela%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="fruit"><span class="em">🍎</span><div class="nm">Apple / सेब</div><div class="pr" id="p-seb">…</div><a class="ob" href="https://wa.me/917409001208?text=Seb%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="fruit"><span class="em">🍋</span><div class="nm">Lemon / नींबू</div><div class="pr" id="p-nimbu">…</div><a class="ob" href="https://wa.me/917409001208?text=Nimbu%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="fruit"><span class="em">🍇</span><div class="nm">Grapes / अंगूर</div><div class="pr" id="p-angur">…</div><a class="ob" href="https://wa.me/917409001208?text=Angur%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="leafy"><span class="em">🌿</span><div class="nm">Coriander / धनिया</div><div class="pr" id="p-dhaniya">…</div><a class="ob" href="https://wa.me/917409001208?text=Dhaniya%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="leafy"><span class="em">🥬</span><div class="nm">Spinach / पालक</div><div class="pr" id="p-palak">…</div><a class="ob" href="https://wa.me/917409001208?text=Palak%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="leafy"><span class="em">🫚</span><div class="nm">Fenugreek / मेथी</div><div class="pr" id="p-methi">…</div><a class="ob" href="https://wa.me/917409001208?text=Methi%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <div class="pc" data-cat="leafy"><span class="em">🌱</span><div class="nm">Mint / पुदीना</div><div class="pr" id="p-pudina">…</div><a class="ob" href="https://wa.me/917409001208?text=Pudina%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why">
+  <div class="container">
+    <div class="sec-lbl">Kyun Choose Karein</div>
+    <div class="sec-title">VeztooX Kyun Hai Alag?</div>
+    <p class="sec-sub">Muzaffarnagar mein sabse bharosa mand fresh delivery.</p>
+    <div class="why-grid">
+      <div class="wc"><div class="wi">🌅</div><h3>Roz Subah Fresh</h3><p>Roz mandi se khareedi hui sabzi — same day delivery. Kal ki basi sabzi nahi.</p></div>
+      <div class="wc"><div class="wi">⚖️</div><h3>Sahi Wazan</h3><p>Digital scale se naapa — jo kaha wahi milega, guarantee ke saath.</p></div>
+      <div class="wc"><div class="wi">💸</div><h3>Mandi Jaisi Keemat</h3><p>Roz ka sahi rate — koi hidden charges nahi.</p></div>
+      <div class="wc"><div class="wi">📍</div><h3>Sirf Muzaffarnagar</h3><p>Local service — aapko jaante hain, pasand yaad rakhte hain.</p></div>
+      <div class="wc"><div class="wi">📱</div><h3>WhatsApp Easy</h3><p>Koi app nahi, koi login nahi — sirf ek message karo.</p></div>
+      <div class="wc"><div class="wi">🤝</div><h3>Cash / UPI Dono</h3><p>Delivery pe payment — advance bilkul nahi.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <div class="container">
+    <div class="sec-lbl">Customer Reviews</div>
+    <div class="sec-title">Muzaffarnagar Log Kya Kehte Hain</div>
+    <div class="rev-grid">
+      <div class="rc"><div class="stars">★★★★★</div><div class="rt">"Bahut hi fresh sabzi aati hai. Ab roz yahi se mangaate hain — mandi jaane ki zarurat hi nahi rahi."</div><div class="rv"><div class="rav">S</div><div><div class="rnm">Sunita Devi</div><div class="rlc">Civil Lines, Muzaffarnagar</div></div></div></div>
+      <div class="rc"><div class="stars">★★★★★</div><div class="rt">"Ghar baithe delivery bohot sahi hai. VeztooX ne life easy kar di — ek WhatsApp pe sab ho jaata hai!"</div><div class="rv"><div class="rav">R</div><div><div class="rnm">Rahul Sharma</div><div class="rlc">Mahavir Colony, Muzaffarnagar</div></div></div></div>
+      <div class="rc"><div class="stars">★★★★☆</div><div class="rt">"Wazan sahi hota hai, sabzi fresh hoti hai. WhatsApp par seedha baat — isse zyada kya chahiye!"</div><div class="rv"><div class="rav">P</div><div><div class="rnm">Priya Agarwal</div><div class="rlc">Shastri Nagar, Muzaffarnagar</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div style="max-width:680px;margin:0 auto;">
+    <h2>Aaj Hi Order Karo!</h2>
+    <p>Muzaffarnagar mein fresh sabzi aur fruits ke liye VeztooX sabse acha option hai. Ek message karo — baaki hum sambhal lete hain. 🌿</p>
+    <a class="cta-wa" href="https://wa.me/917409001208?text=Hello%20VeztooX!%20Mujhe%20order%20karna%20hai.%20Aaj%20ka%20rate%20batao." target="_blank"><span class="wi">💬</span> WhatsApp Par Order Karo</a>
+    <div style="margin-top:24px;color:rgba(255,255,255,.7);font-size:.9rem;">📍 Muzaffarnagar, UP &nbsp;|&nbsp; ⏰ 6 AM – 9 PM Daily</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fg">
+    <div class="fb">
+      <div class="nav-logo">Veztoo<span>X</span></div>
+      <p>Muzaffarnagar ki sabse tazi sabzi aur fruit delivery. Mandi se seedha ghar tak — roz, fresh, sahi wazan.</p>
+    </div>
+    <div class="fc"><h4>Quick Links</h4><ul><li><a href="#products">Aaj Ke Prices</a></li><li><a href="#area">Delivery Area</a></li><li><a href="#how">How it Works</a></li><li><a href="https://wa.me/917409001208" target="_blank">WhatsApp Order</a></li></ul></div>
+    <div class="fc"><h4>Contact</h4><ul><li><a href="https://wa.me/917409001208" target="_blank">📱 WhatsApp</a></li><li><a href="#">📍 Muzaffarnagar, UP</a></li><li><a href="#">⏰ 6 AM – 9 PM</a></li><li><a href="#">📧 veztoox@gmail.com</a></li></ul></div>
+  </div>
+  <div class="fb2"><span>© 2025 VeztooX Enterprises. All rights reserved.</span><span>📍 Proudly serving Muzaffarnagar</span></div>
+</footer>
+
+<a class="fwa" href="https://wa.me/917409001208?text=Hello%20VeztooX!%20Order%20karna%20hai." target="_blank">💬</a>
+
+<script>
+// POPUP
+function confirmArea(yes){
+  if(yes){
+    document.getElementById('mznOverlay').style.display='none';
+    sessionStorage.setItem('mzn','yes');
+  } else {
+    document.getElementById('mznOverlay').style.display='none';
+    document.getElementById('outsideMsg').classList.add('show');
+  }
+}
+function goBack(){
+  document.getElementById('outsideMsg').classList.remove('show');
+  document.getElementById('mznOverlay').style.display='flex';
+}
+if(sessionStorage.getItem('mzn')==='yes') document.getElementById('mznOverlay').style.display='none';
+
+// LOAD PRICES
+function loadPrices(){
+  try{
+    const p=VEZTOOX_PRICES;
+    document.getElementById('priceBar').innerHTML=`📅 Aaj ke prices — <strong>${p.lastUpdated}</strong> &nbsp;|&nbsp; Roz subah mandi se update hote hain 🌿`;
+    document.getElementById('priceDate').textContent=p.lastUpdated;
+    const m={'p-tamatar':p.tamatar,'p-aloo':p.aloo,'p-pyaz':p.pyaz,'p-gajar':p.gajar,'p-matar':p.matar,'p-kheera':p.kheera,'p-baingan':p.baingan,'p-hariMirch':p.hariMirch,'p-kela':p.kela,'p-seb':p.seb,'p-nimbu':p.nimbu,'p-angur':p.angur,'p-dhaniya':p.dhaniya,'p-palak':p.palak,'p-methi':p.methi,'p-pudina':p.pudina};
+    for(const[id,val] of Object.entries(m)){const el=document.getElementById(id);if(el&&val)el.textContent=val;}
+  }catch(e){
+    document.getElementById('priceBar').innerHTML='📅 Aaj ke prices — WhatsApp par poochh sakte hain!';
+  }
+}
+loadPrices();
+
+// FILTER
+function filterCat(cat,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#productGrid .pc').forEach(c=>{
+    (cat==='all'||c.dataset.cat===cat)?c.classList.remove('hidden'):c.classList.add('hidden');
+  });
+}
+
+// SCROLL ANIM
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){e.target.style.animation=`fadeUp 0.45s ease ${i*.05}s both`;obs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.pc,.how-card,.wc,.rc').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
