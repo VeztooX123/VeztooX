@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VeztooX Admin — Price Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a7a4a;
+    --green-light: #25a862;
+    --green-glow: rgba(37,168,98,0.18);
+    --orange: #f07c2a;
+    --bg: #0d1f16;
+    --surface: #132d1e;
+    --surface2: #1c3d28;
+    --border: rgba(37,168,98,0.2);
+    --text: #e8f5ee;
+    --muted: #7aab8a;
+    --red: #e05555;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    background-image: radial-gradient(ellipse at 20% 10%, rgba(26,122,74,0.15) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 80%, rgba(37,168,98,0.08) 0%, transparent 50%);
+  }
+
+  /* ─── LOGIN SCREEN ─── */
+  #login-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 2rem;
+  }
+
+  .login-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem; font-weight: 800;
+    color: var(--green-light);
+    letter-spacing: -1px;
+    margin-bottom: 0.3rem;
+  }
+  .login-logo span { color: var(--orange); }
+  .login-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 2.5rem; }
+
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.2rem;
+    width: 100%; max-width: 360px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .login-card h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+  }
+
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+  .field input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    transition: border 0.2s;
+    outline: none;
+  }
+  .field input:focus { border-color: var(--green-light); box-shadow: 0 0 0 3px var(--green-glow); }
+
+  .btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.85rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    margin-top: 0.5rem;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,168,98,0.35); }
+  .btn-primary:active { transform: translateY(0); }
+
+  #login-error { color: var(--red); font-size: 0.85rem; margin-top: 0.8rem; text-align: center; display: none; }
+
+  /* ─── SETUP HINT ─── */
+  .setup-hint {
+    margin-top: 1.5rem;
+    background: rgba(240,124,42,0.08);
+    border: 1px solid rgba(240,124,42,0.2);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    font-size: 0.8rem;
+    color: #f0a060;
+    line-height: 1.6;
+  }
+  .setup-hint strong { color: var(--orange); }
+
+  /* ─── ADMIN PANEL ─── */
+  #admin-panel { display: none; max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 2rem; padding: 1rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+  .topbar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--green-light); }
+  .topbar-logo span { color: var(--orange); }
+  .topbar-right { display: flex; align-items: center; gap: 0.8rem; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-light); box-shadow: 0 0 8px var(--green-light); }
+  .logout-btn {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 8px; padding: 0.4rem 0.9rem; cursor: pointer; font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+  }
+  .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--green-light); color: white;
+    padding: 0.75rem 1.5rem; border-radius: 50px;
+    font-weight: 600; font-size: 0.9rem;
+    box-shadow: 0 8px 30px rgba(37,168,98,0.4);
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 999; white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast.error { background: var(--red); box-shadow: 0 8px 30px rgba(224,85,85,0.4); }
+
+  /* Section */
+  .section-header {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px;
+    margin: 1.8rem 0 1rem;
+  }
+  .section-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .section-emoji { font-size: 1rem; }
+
+  /* Price Item */
+  .price-item {
+    display: grid; grid-template-columns: 1fr auto auto auto;
+    align-items: center; gap: 0.8rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.6rem;
+    transition: border 0.2s, box-shadow 0.2s;
+  }
+  .price-item:hover { border-color: rgba(37,168,98,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+
+  .item-name {
+    font-weight: 500; font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  .price-input-wrap { position: relative; }
+  .price-input-wrap::before {
+    content: '₹'; position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%);
+    color: var(--green-light); font-weight: 600; font-size: 0.9rem;
+  }
+  .price-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 0.6rem 0.5rem 1.6rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    width: 90px; text-align: right;
+    outline: none; transition: border 0.2s;
+  }
+  .price-input:focus { border-color: var(--green-light); box-shadow: 0 0 0 3px var(--green-glow); }
+
+  .unit-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem; color: var(--muted);
+  }
+
+  .del-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); font-size: 1rem; padding: 0.3rem;
+    border-radius: 6px; transition: color 0.2s, background 0.2s;
+    line-height: 1;
+  }
+  .del-btn:hover { color: var(--red); background: rgba(224,85,85,0.1); }
+
+  /* Add Item Row */
+  .add-row {
+    display: grid; grid-template-columns: 1fr 90px 70px auto;
+    gap: 0.6rem; margin-top: 0.8rem; align-items: center;
+  }
+  .add-row input, .add-row select {
+    background: var(--bg); border: 1px dashed var(--border);
+    border-radius: 10px; padding: 0.6rem 0.8rem;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    outline: none; transition: border 0.2s;
+  }
+  .add-row input:focus, .add-row select:focus { border-color: var(--green-light); border-style: solid; }
+  .add-row select option { background: var(--surface); }
+  .add-btn {
+    background: var(--green);
+    border: none; border-radius: 10px;
+    color: white; font-size: 1.2rem; cursor: pointer;
+    padding: 0.5rem 0.7rem; transition: background 0.2s;
+    line-height: 1;
+  }
+  .add-btn:hover { background: var(--green-light); }
+
+  /* Save Button */
+  .save-btn {
+    width: 100%; margin-top: 2rem;
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: white; border: none; border-radius: 14px;
+    padding: 1rem; font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 700; cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .save-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37,168,98,0.4); }
+  .save-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* Settings panel */
+  .settings-toggle {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 8px; padding: 0.4rem 0.8rem; cursor: pointer;
+    font-size: 0.78rem; font-family: 'DM Sans', sans-serif; margin-bottom: 0.5rem;
+    transition: all 0.2s;
+  }
+  .settings-toggle:hover { border-color: var(--orange); color: var(--orange); }
+  .settings-box {
+    background: rgba(240,124,42,0.06); border: 1px solid rgba(240,124,42,0.15);
+    border-radius: 12px; padding: 1.2rem; display: none; margin-bottom: 1rem;
+  }
+  .settings-box.open { display: block; }
+  .settings-box .field label { color: #f0a060; }
+  .settings-box .field input { border-color: rgba(240,124,42,0.2); }
+  .settings-box .btn-save-cfg {
+    background: var(--orange); border: none; color: white; border-radius: 8px;
+    padding: 0.6rem 1.2rem; font-family: 'Syne', sans-serif; font-weight: 700;
+    cursor: pointer; margin-top: 0.5rem; font-size: 0.9rem;
+    transition: opacity 0.2s;
+  }
+  .settings-box .btn-save-cfg:hover { opacity: 0.85; }
+
+  /* Loader */
+  .loader { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.9rem; }
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--green-light); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 0.5rem; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 480px) {
+    .price-item { grid-template-columns: 1fr auto auto; }
+    .unit-badge { display: none; }
+    .add-row { grid-template-columns: 1fr 80px auto; }
+    .add-row select { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="login-screen">
+  <div class="login-logo">Veztoo<span>X</span></div>
+  <div class="login-sub">Admin Price Manager</div>
+
+  <div class="login-card">
+    <h2>🔐 Login</h2>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="pwd-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Enter Panel</button>
+    <div id="login-error">❌ Galat password! Dobara try karo.</div>
+  </div>
+
+  <div class="setup-hint">
+    <strong>⚙️ Pehli baar setup:</strong><br>
+    Default password: <strong>veztoo123</strong><br>
+    Login ke baad Settings mein jaake password aur GitHub token change karo.
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN PANEL ══════════════ -->
+<div id="admin-panel">
+  <div class="topbar">
+    <div class="topbar-logo">Veztoo<span>X</span> Admin</div>
+    <div class="topbar-right">
+      <div class="status-dot"></div>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <button class="settings-toggle" onclick="toggleSettings()">⚙️ GitHub Settings &amp; Password</button>
+  <div class="settings-box" id="settings-box">
+    <div class="field">
+      <label>GitHub Username</label>
+      <input type="text" id="cfg-user" placeholder="e.g. rahul123">
+    </div>
+    <div class="field">
+      <label>Repository Name</label>
+      <input type="text" id="cfg-repo" placeholder="e.g. VeztooX">
+    </div>
+    <div class="field">
+      <label>GitHub Token (Personal Access Token)</label>
+      <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxx">
+    </div>
+    <div class="field">
+      <label>New Admin Password</label>
+      <input type="password" id="cfg-pwd" placeholder="Nayi password daalo">
+    </div>
+    <button class="btn-save-cfg" onclick="saveConfig()">💾 Save Settings</button>
+  </div>
+
+  <div id="price-editor">
+    <div class="loader"><span class="spinner"></span> Prices load ho rahi hain...</div>
+  </div>
+
+  <button class="save-btn" id="save-btn" onclick="savePrices()">
+    <span>💾</span> Save &amp; Website Update Karo
+  </button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── Config & State ──
+const DEFAULT_PWD = 'veztoo123';
+let prices = { vegetables: [], fruits: [] };
+
+function getCfg(k, def='') { return localStorage.getItem('vzx_'+k) || def; }
+function setCfg(k,v) { localStorage.setItem('vzx_'+k, v); }
+
+// ── Auth ──
+function doLogin() {
+  const pwd = document.getElementById('pwd-input').value;
+  const stored = getCfg('pwd', DEFAULT_PWD);
+  if (pwd === stored) {
+    setCfg('session', Date.now());
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    loadPrices();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+  }
+}
+function doLogout() {
+  setCfg('session', '');
+  location.reload();
+}
+
+// Check if already logged in (within 12 hours)
+window.onload = () => {
+  const sess = parseInt(getCfg('session','0'));
+  if (Date.now() - sess < 43200000) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    // Pre-fill settings
+    document.getElementById('cfg-user').value = getCfg('user');
+    document.getElementById('cfg-repo').value = getCfg('repo');
+    loadPrices();
+  }
+};
+
+// ── Settings ──
+function toggleSettings() {
+  const box = document.getElementById('settings-box');
+  box.classList.toggle('open');
+  document.getElementById('cfg-user').value = getCfg('user');
+  document.getElementById('cfg-repo').value = getCfg('repo');
+}
+function saveConfig() {
+  const u = document.getElementById('cfg-user').value.trim();
+  const r = document.getElementById('cfg-repo').value.trim();
+  const t = document.getElementById('cfg-token').value.trim();
+  const p = document.getElementById('cfg-pwd').value.trim();
+  if (u) setCfg('user', u);
+  if (r) setCfg('repo', r);
+  if (t) setCfg('token', t);
+  if (p) setCfg('pwd', p);
+  showToast('✅ Settings save ho gayi!');
+  document.getElementById('settings-box').classList.remove('open');
+}
+
+// ── Load Prices ──
+async function loadPrices() {
+  const user = getCfg('user');
+  const repo = getCfg('repo');
+  const token = getCfg('token');
+
+  // Try GitHub API first
+  if (user && repo && token) {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/prices.json`, {
+        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        prices = JSON.parse(atob(data.content.replace(/\n/g,'')));
+        renderEditor();
+        return;
+      }
+    } catch(e) {}
+  }
+
+  // Fallback: fetch local prices.json
+  try {
+    const res = await fetch('prices.json');
+    if (res.ok) { prices = await res.json(); renderEditor(); return; }
+  } catch(e) {}
+
+  // Default starter data
+  prices = {
+    vegetables: [
+      {name:"Aloo", price:30, unit:"kg"},
+      {name:"Pyaaz", price:25, unit:"kg"},
+      {name:"Tamatar", price:20, unit:"kg"},
+      {name:"Gobhi", price:40, unit:"kg"},
+      {name:"Palak", price:15, unit:"bunch"}
+    ],
+    fruits: [
+      {name:"Seb", price:120, unit:"kg"},
+      {name:"Kela", price:50, unit:"dozen"},
+      {name:"Aam", price:80, unit:"kg"},
+      {name:"Santra", price:60, unit:"kg"}
+    ]
+  };
+  renderEditor();
+}
+
+// ── Render Editor ──
+function renderEditor() {
+  const html = `
+    <div class="section-header"><span class="section-emoji">🥦</span> Sabziyan (Vegetables)</div>
+    <div id="veg-items">
+      ${prices.vegetables.map((v,i) => itemRow('veg',i,v)).join('')}
+    </div>
+    ${addRow('veg')}
+
+    <div class="section-header"><span class="section-emoji">🍎</span> Phal (Fruits)</div>
+    <div id="fruit-items">
+      ${prices.fruits.map((v,i) => itemRow('fruit',i,v)).join('')}
+    </div>
+    ${addRow('fruit')}
+  `;
+  document.getElementById('price-editor').innerHTML = html;
+}
+
+function itemRow(type, i, item) {
+  return `
+    <div class="price-item" id="${type}-${i}">
+      <div class="item-name">${item.name}</div>
+      <div class="price-input-wrap">
+        <input class="price-input" type="number" value="${item.price}" min="0"
+          onchange="updatePrice('${type}',${i},this.value)">
+      </div>
+      <span class="unit-badge">/${item.unit}</span>
+      <button class="del-btn" onclick="deleteItem('${type}',${i})" title="Hatao">🗑️</button>
+    </div>`;
+}
+
+function addRow(type) {
+  return `
+    <div class="add-row">
+      <input type="text" id="new-name-${type}" placeholder="Naya naam (e.g. Matar)">
+      <input type="number" id="new-price-${type}" placeholder="₹ Price" min="0">
+      <select id="new-unit-${type}">
+        <option value="kg">kg</option>
+        <option value="dozen">dozen</option>
+        <option value="piece">piece</option>
+        <option value="bunch">bunch</option>
+        <option value="500g">500g</option>
+      </select>
+      <button class="add-btn" onclick="addItem('${type}')" title="Add">＋</button>
+    </div>`;
+}
+
+// ── CRUD ──
+function updatePrice(type, i, val) {
+  const arr = type==='veg' ? prices.vegetables : prices.fruits;
+  arr[i].price = parseFloat(val) || 0;
+}
+function deleteItem(type, i) {
+  const arr = type==='veg' ? prices.vegetables : prices.fruits;
+  arr.splice(i, 1);
+  renderEditor();
+}
+function addItem(type) {
+  const name = document.getElementById(`new-name-${type}`).value.trim();
+  const price = parseFloat(document.getElementById(`new-price-${type}`).value) || 0;
+  const unit = document.getElementById(`new-unit-${type}`).value;
+  if (!name) { showToast('❗ Naam daalna zaroori hai!', true); return; }
+  const arr = type==='veg' ? prices.vegetables : prices.fruits;
+  arr.push({name, price, unit});
+  renderEditor();
+  showToast(`✅ ${name} add ho gaya!`);
+}
+
+// ── Save to GitHub ──
+async function savePrices() {
+  const user = getCfg('user');
+  const repo = getCfg('repo');
+  const token = getCfg('token');
+
+  if (!user || !repo || !token) {
+    showToast('⚠️ Pehle Settings mein GitHub details daalo!', true);
+    document.getElementById('settings-box').classList.add('open');
+    return;
+  }
+
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="border-top-color:white;display:inline-block;width:16px;height:16px;border-width:2px;"></span> Save ho raha hai...';
+
+  try {
+    // Get current SHA
+    const getRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/prices.json`, {
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    let sha = '';
+    if (getRes.ok) { const d = await getRes.json(); sha = d.sha; }
+
+    // Commit updated file
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(prices, null, 2))));
+    const putRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/prices.json`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: `💰 Price update — ${new Date().toLocaleString('hi-IN')}`,
+        content,
+        sha
+      })
+    });
+
+    if (putRes.ok) {
+      showToast('🎉 Website update ho gayi! 2 min mein live!');
+    } else {
+      const err = await putRes.json();
+      showToast('❌ Error: ' + (err.message || 'GitHub se connect nahi hua'), true);
+    }
+  } catch(e) {
+    showToast('❌ Network error: ' + e.message, true);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>💾</span> Save & Website Update Karo';
+}
+
+// ── Toast ──
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = isError ? 'error' : '';
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>
