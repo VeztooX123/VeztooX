@@ -7,17 +7,17 @@
 const VEZTOOX_PRICES = {
 
   // ── LAST UPDATED ──
-  lastUpdated: "06 April 2025",   // ← aaj ki date yahan likhna
+  lastUpdated: "07 April 2025",   // ← aaj ki date yahan likhna
 
   // ── SABZIYAN ──
-  tamatar:    "₹28 /kg",
+  tamatar:    "₹38 /kg",
   aloo:       "₹20 /kg",
-  pyaz:       "₹35 /kg",
+  pyaz:       "₹38 /kg",
   gajar:      "₹35 /kg",
-  matar:      "₹35 /kg",
+  matar:      "₹37 /kg",
   kheera:     "₹20 /kg",
   baingan:    "₹36 /kg",
-  hariMirch:  "₹60 /100g",
+  hariMirch:  "₹10 /100g",
 
   // ── FRUITS ──
   kela:       "₹44 /dozen",
