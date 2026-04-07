@@ -43,7 +43,7 @@
   .price-bar strong{font-weight:800;}
 
   /* NAV */
-  nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(253,248,240,.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(26,122,58,.1);}
+  nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(253,248,240,.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(26,122,58,.1);}
   .nav-logo{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;color:var(--green);letter-spacing:-1px;}
   .nav-logo span{color:var(--orange);}
   .nav-links{display:flex;gap:24px;list-style:none;}
@@ -74,7 +74,7 @@
 
   /* MARQUEE */
   .marquee-wrap{background:var(--green);padding:13px 0;overflow:hidden;}
-  .marquee-track{display:flex;animation:marquee 20s linear infinite;white-space:nowrap;}
+  .marquee-track{display:flex;animation:marquee 22s linear infinite;white-space:nowrap;}
   .m-item{color:#fff;font-weight:600;font-size:.9rem;padding:0 22px;display:inline-flex;align-items:center;gap:9px;}
   .m-dot{color:var(--yellow);}
 
@@ -106,18 +106,208 @@
   .tab{padding:9px 20px;border-radius:50px;cursor:pointer;border:2px solid rgba(0,0,0,.08);font-weight:600;font-size:.88rem;transition:all .2s;background:#fff;color:var(--muted);}
   .tab.active{background:var(--green);color:#fff;border-color:var(--green);}
   .tab:hover:not(.active){border-color:var(--green);color:var(--green);}
-  .prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:18px;}
-  .pc{background:#fff;border-radius:18px;padding:20px 16px;text-align:center;border:1px solid rgba(0,0,0,.06);transition:transform .22s,box-shadow .22s;}
+  .prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:18px;}
+
+  /* Product Card */
+  .pc{background:#fff;border-radius:18px;padding:20px 16px;text-align:center;border:1px solid rgba(0,0,0,.06);transition:transform .22s,box-shadow .22s;position:relative;}
   .pc:hover{transform:translateY(-5px);box-shadow:0 8px 28px rgba(26,122,58,.12);}
-  .pc .em{font-size:3rem;margin-bottom:10px;display:block;}
+  .pc .em{font-size:3rem;margin-bottom:10px;display:block;line-height:1;}
   .pc .nm{font-weight:700;color:var(--dark);font-size:.93rem;margin-bottom:3px;}
-  .pc .hi{font-size:.8rem;color:var(--muted);margin-bottom:10px;}
-  .pc .pr{background:var(--green-pale);color:var(--green);padding:5px 12px;border-radius:50px;font-size:.8rem;font-weight:700;display:inline-block;}
-  .pc .ob{display:block;width:100%;background:var(--wa);color:#fff;padding:9px 0;border-radius:10px;text-decoration:none;font-size:.8rem;font-weight:600;margin-top:11px;transition:background .2s;}
-  .pc .ob:hover{background:var(--wa-dark);}
+  .pc .pr{background:var(--green-pale);color:var(--green);padding:5px 12px;border-radius:50px;font-size:.8rem;font-weight:700;display:inline-block;margin-bottom:12px;}
   .pc.hidden{display:none;}
 
-  /* AREA */
+  /* Add to Cart btn */
+  .add-cart-btn{
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    width:100%;background:var(--green);color:#fff;
+    padding:9px 0;border-radius:10px;border:none;
+    font-size:.82rem;font-weight:700;cursor:pointer;
+    transition:background .2s,transform .15s;
+    font-family:'DM Sans',sans-serif;
+  }
+  .add-cart-btn:hover{background:var(--green-light);}
+  .add-cart-btn:active{transform:scale(.96);}
+
+  /* Qty Controls on card */
+  .qty-controls{display:flex;align-items:center;border:2px solid var(--green);border-radius:10px;overflow:hidden;width:100%;}
+  .qty-btn{background:#fff;border:none;color:var(--green);font-size:1.25rem;font-weight:700;width:36px;height:36px;cursor:pointer;flex-shrink:0;transition:background .15s;display:flex;align-items:center;justify-content:center;}
+  .qty-btn:hover{background:var(--green-pale);}
+  .qty-num{flex:1;text-align:center;font-weight:800;font-size:1rem;color:var(--dark);background:#fff;line-height:36px;}
+
+  /* ═══════════ CART FAB ═══════════ */
+  .cart-fab{
+    position:fixed;bottom:26px;left:22px;z-index:500;
+    width:60px;height:60px;border-radius:50%;
+    background:var(--orange);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.55rem;cursor:pointer;border:none;
+    box-shadow:0 6px 24px rgba(244,124,32,.55);
+    transition:transform .2s,box-shadow .2s;
+  }
+  .cart-fab:hover{transform:scale(1.1);box-shadow:0 8px 30px rgba(244,124,32,.7);}
+  .cart-count{
+    position:absolute;top:-5px;right:-5px;
+    background:var(--green);color:#fff;
+    width:24px;height:24px;border-radius:50%;
+    font-size:.72rem;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+    border:2px solid #fff;
+    transition:transform .2s;
+  }
+  .cart-count.hidden{display:none;}
+  .cart-count.bump{animation:countBump .3s cubic-bezier(.34,1.56,.64,1);}
+
+  /* ═══════════ MODAL OVERLAY ═══════════ */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:1000;
+    background:rgba(0,0,0,0.55);
+    backdrop-filter:blur(4px);
+    display:flex;align-items:flex-end;justify-content:center;
+    opacity:0;pointer-events:none;
+    transition:opacity .28s ease;
+  }
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+
+  /* ═══════════ CART SHEET ═══════════ */
+  .cart-sheet{
+    background:#fff;border-radius:28px 28px 0 0;
+    width:100%;max-width:580px;
+    max-height:88vh;
+    display:flex;flex-direction:column;
+    transform:translateY(100%);
+    transition:transform .35s cubic-bezier(.32,0,.25,1);
+    box-shadow:0 -8px 40px rgba(0,0,0,.15);
+  }
+  .modal-overlay.open .cart-sheet{transform:translateY(0);}
+
+  .cart-header{
+    padding:20px 24px 16px;
+    border-bottom:1px solid #f0f0f0;
+    display:flex;align-items:center;justify-content:space-between;
+    flex-shrink:0;
+  }
+  .cart-header-left{display:flex;align-items:center;gap:10px;}
+  .cart-header h2{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--dark);}
+  .cart-item-count{background:var(--green-pale);color:var(--green);font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:50px;}
+  .cart-close{background:#f5f5f5;border:none;font-size:1.1rem;cursor:pointer;color:var(--muted);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s,color .2s;}
+  .cart-close:hover{background:#ffe0e0;color:red;}
+
+  .cart-body{flex:1;overflow-y:auto;padding:10px 24px 16px;}
+  .cart-body::-webkit-scrollbar{width:4px;}
+  .cart-body::-webkit-scrollbar-track{background:#f5f5f5;}
+  .cart-body::-webkit-scrollbar-thumb{background:var(--green-pale);border-radius:4px;}
+
+  .cart-empty{text-align:center;padding:48px 20px;}
+  .cart-empty .ce-emoji{font-size:4rem;margin-bottom:14px;display:block;}
+  .cart-empty h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--dark);margin-bottom:8px;}
+  .cart-empty p{font-size:.9rem;color:var(--muted);line-height:1.6;}
+  .go-shop-btn{display:inline-block;margin-top:18px;background:var(--green);color:#fff;padding:11px 26px;border-radius:50px;font-weight:700;font-size:.9rem;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;}
+
+  .cart-item{
+    display:flex;align-items:flex-start;gap:13px;
+    padding:14px 0;
+    border-bottom:1px solid #f5f5f5;
+  }
+  .ci-emoji{font-size:2.4rem;flex-shrink:0;line-height:1;padding-top:2px;}
+  .ci-info{flex:1;min-width:0;}
+  .ci-name{font-weight:700;font-size:.95rem;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ci-rate{font-size:.8rem;color:var(--muted);margin-top:2px;}
+  .ci-qty-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+  .ci-qty-btn{background:var(--green-pale);border:none;color:var(--green);font-size:1.1rem;font-weight:700;width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;flex-shrink:0;}
+  .ci-qty-btn:hover{background:var(--green);color:#fff;}
+  .ci-qty-num{font-weight:800;font-size:.95rem;min-width:22px;text-align:center;color:var(--dark);}
+  .ci-unit{font-size:.78rem;color:var(--muted);}
+  .ci-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;}
+  .ci-subtotal{font-weight:800;font-size:1rem;color:var(--green);}
+  .ci-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:1.1rem;padding:4px 6px;border-radius:8px;transition:color .2s,background .2s;line-height:1;}
+  .ci-del:hover{color:#e05555;background:#fff0f0;}
+
+  .cart-footer{
+    padding:16px 24px 24px;
+    border-top:2px solid #f0f0f0;
+    flex-shrink:0;background:#fff;
+    border-radius:0 0 0 0;
+  }
+  .cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .ct-label{font-size:.88rem;color:var(--muted);font-weight:500;}
+  .ct-items{font-size:.8rem;color:var(--muted);}
+  .ct-amount{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;color:var(--dark);}
+  .cart-note{font-size:.78rem;color:var(--muted);margin-bottom:14px;background:var(--green-pale);padding:8px 12px;border-radius:8px;}
+  .checkout-btn{
+    width:100%;background:var(--wa);color:#fff;border:none;
+    padding:15px;border-radius:14px;
+    font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+    transition:background .2s,transform .15s;
+    box-shadow:0 4px 16px rgba(37,211,102,.35);
+  }
+  .checkout-btn:hover{background:var(--wa-dark);transform:translateY(-2px);}
+  .clear-cart-btn{width:100%;background:none;border:none;color:var(--muted);font-size:.82rem;cursor:pointer;margin-top:10px;font-family:'DM Sans',sans-serif;padding:6px;transition:color .2s;}
+  .clear-cart-btn:hover{color:red;}
+
+  /* ═══════════ CHECKOUT SHEET ═══════════ */
+  .checkout-sheet{
+    background:#fff;border-radius:28px 28px 0 0;
+    width:100%;max-width:580px;
+    max-height:92vh;overflow-y:auto;
+    padding:28px 24px 36px;
+    transform:translateY(100%);
+    transition:transform .35s cubic-bezier(.32,0,.25,1);
+    box-shadow:0 -8px 40px rgba(0,0,0,.15);
+  }
+  .modal-overlay.open .checkout-sheet{transform:translateY(0);}
+  .checkout-sheet::-webkit-scrollbar{width:4px;}
+  .checkout-sheet::-webkit-scrollbar-thumb{background:var(--green-pale);border-radius:4px;}
+
+  .co-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+  .co-head h2{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:900;color:var(--dark);}
+  .co-close{background:#f5f5f5;border:none;font-size:1.1rem;cursor:pointer;color:var(--muted);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s;}
+  .co-close:hover{background:#ffe0e0;color:red;}
+  .co-order-summary{background:var(--cream);border-radius:14px;padding:14px 16px;margin-bottom:20px;max-height:160px;overflow-y:auto;}
+  .co-order-summary h4{font-size:.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+  .co-item-line{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.04);}
+  .co-item-line:last-child{border:none;}
+  .co-item-name{color:var(--text);font-weight:500;}
+  .co-item-price{color:var(--green);font-weight:700;}
+  .co-total-line{display:flex;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:2px solid rgba(26,122,58,.15);}
+  .co-total-line span:first-child{font-weight:700;color:var(--dark);}
+  .co-total-line span:last-child{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--green);}
+
+  .co-field{margin-bottom:16px;}
+  .co-field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+  .co-field input,.co-field textarea{
+    width:100%;border:2px solid #eee;border-radius:12px;
+    padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--dark);
+    outline:none;transition:border .2s,box-shadow .2s;resize:none;
+    background:#fafafa;
+  }
+  .co-field input:focus,.co-field textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(26,122,58,.08);background:#fff;}
+
+  .cod-badge{
+    background:linear-gradient(135deg,var(--green-pale),#d4f5e0);
+    color:var(--green);border-radius:12px;
+    padding:14px 16px;font-size:.9rem;font-weight:600;
+    margin-bottom:20px;display:flex;align-items:center;gap:10px;
+    border:1px solid rgba(26,122,58,.15);
+  }
+  .cod-badge .cb-icon{font-size:1.4rem;}
+  .cod-badge div{line-height:1.5;}
+  .cod-badge strong{display:block;font-size:.95rem;}
+  .cod-badge span{font-size:.8rem;opacity:.8;}
+
+  .co-submit{
+    width:100%;background:linear-gradient(135deg,var(--wa),var(--wa-dark));
+    color:#fff;border:none;padding:15px;border-radius:14px;
+    font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+    transition:opacity .2s,transform .15s;
+    box-shadow:0 4px 20px rgba(37,211,102,.4);
+  }
+  .co-submit:hover{opacity:.9;transform:translateY(-1px);}
+  .co-back{background:none;border:none;color:var(--muted);font-size:.88rem;cursor:pointer;margin-top:12px;width:100%;font-family:'DM Sans',sans-serif;padding:8px;display:flex;align-items:center;justify-content:center;gap:6px;transition:color .2s;}
+  .co-back:hover{color:var(--dark);}
+
+  /* ═══════════ AREA SECTION ═══════════ */
   .area-sec{background:#fff;padding:60px 24px;}
   .area-box{max-width:680px;margin:0 auto;text-align:center;}
   .area-visual{background:var(--cream);border-radius:20px;border:2px dashed var(--green);padding:32px;margin:28px 0 20px;}
@@ -141,13 +331,57 @@
   /* REVIEWS */
   .reviews{background:#fff;}
   .rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px;margin-top:44px;}
-  .rc{background:var(--cream);border-radius:var(--radius);padding:26px;border:1px solid rgba(26,122,58,.08);}
-  .stars{color:var(--orange);font-size:1.1rem;margin-bottom:12px;}
+  .rc{background:var(--cream);border-radius:var(--radius);padding:26px;border:1px solid rgba(26,122,58,.08);position:relative;}
+  .rc.user-review{border-color:rgba(26,122,58,.2);background:linear-gradient(135deg,#f0faf3,var(--cream));}
+  .rc.user-review::before{content:'✨ New';position:absolute;top:14px;right:14px;background:var(--green);color:#fff;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:50px;}
+  .stars{color:var(--orange);font-size:1.1rem;margin-bottom:12px;letter-spacing:2px;}
   .rt{font-size:.93rem;color:var(--text);line-height:1.7;margin-bottom:14px;font-style:italic;}
   .rv{display:flex;align-items:center;gap:10px;}
-  .rav{width:40px;height:40px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;}
+  .rav{width:40px;height:40px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;}
   .rnm{font-weight:700;font-size:.88rem;color:var(--dark);}
   .rlc{font-size:.78rem;color:var(--muted);}
+
+  /* ═══════════ REVIEW FORM ═══════════ */
+  .review-form-wrap{margin-top:48px;}
+  .review-form-box{
+    background:linear-gradient(135deg,var(--green-pale),#fff);
+    border-radius:24px;padding:32px;
+    border:2px dashed rgba(26,122,58,.25);
+    max-width:680px;margin:0 auto;
+  }
+  .rf-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+  .rf-head-icon{font-size:2.5rem;flex-shrink:0;}
+  .rf-head h3{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--dark);margin-bottom:4px;}
+  .rf-head p{font-size:.88rem;color:var(--muted);line-height:1.5;}
+  .rf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:500px){.rf-grid{grid-template-columns:1fr;}}
+  .rf-field{margin-bottom:14px;}
+  .rf-field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+  .rf-field input,.rf-field textarea{
+    width:100%;border:2px solid rgba(26,122,58,.15);border-radius:12px;
+    padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:.93rem;color:var(--dark);
+    background:#fff;outline:none;transition:border .2s,box-shadow .2s;resize:none;
+  }
+  .rf-field input:focus,.rf-field textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(26,122,58,.08);}
+
+  /* Star Rating */
+  .star-selector{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:4px;}
+  .star-selector input{display:none;}
+  .star-selector label{font-size:2rem;cursor:pointer;color:#ddd;transition:color .1s,transform .1s;}
+  .star-selector label:hover{transform:scale(1.2);}
+  .star-selector label:hover,
+  .star-selector label:hover ~ label{color:var(--orange);}
+  .star-selector input:checked ~ label{color:var(--orange);}
+
+  .rf-submit{
+    background:var(--green);color:#fff;border:none;
+    padding:13px 32px;border-radius:12px;
+    font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;
+    cursor:pointer;transition:background .2s,transform .15s;
+    display:flex;align-items:center;gap:8px;
+  }
+  .rf-submit:hover{background:var(--green-light);transform:translateY(-2px);}
+  .rf-success{display:none;background:var(--green);color:#fff;border-radius:12px;padding:16px 20px;margin-top:14px;text-align:center;font-weight:600;}
 
   /* CTA */
   .cta{background:linear-gradient(135deg,var(--orange),#e06010);text-align:center;padding:72px 24px;}
@@ -172,16 +406,30 @@
   /* FLOAT WA */
   .fwa{position:fixed;bottom:26px;right:22px;z-index:500;width:58px;height:58px;border-radius:50%;background:var(--wa);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.7rem;text-decoration:none;box-shadow:0 6px 24px rgba(37,211,102,.5);animation:waF 3s ease-in-out infinite;}
 
+  /* TOAST */
+  #toast{
+    position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--dark);color:#fff;
+    padding:10px 20px;border-radius:50px;
+    font-size:.85rem;font-weight:600;
+    opacity:0;pointer-events:none;z-index:9000;
+    transition:opacity .25s,transform .25s;
+    white-space:nowrap;
+    display:flex;align-items:center;gap:8px;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
   @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
   @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
   @keyframes waF{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
   @keyframes popIn{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+  @keyframes countBump{0%{transform:scale(1);}50%{transform:scale(1.5);}100%{transform:scale(1);}}
 </style>
 </head>
 <body>
 
-<!-- POPUP -->
+<!-- ══════════ POPUP ══════════ -->
 <div class="mzn-overlay" id="mznOverlay">
   <div class="mzn-popup">
     <div class="pin">📍</div>
@@ -192,22 +440,21 @@
     <button class="mzn-no" onclick="confirmArea(false)">❌ Nahi, Main Kahin Aur Hoon</button>
   </div>
 </div>
-
 <div class="outside-msg" id="outsideMsg">
   <div style="font-size:3rem">😔</div>
   <h2>Abhi Available Nahi</h2>
-  <p>Hum abhi sirf Muzaffarnagar mein deliver karte hain. Jald hi aapke shehar mein bhi aayenge! Agar Muzaffarnagar mein koi jaanta ho, unhe zaroor batana. 🙏</p>
+  <p>Hum abhi sirf Muzaffarnagar mein deliver karte hain. Jald hi aapke shehar mein bhi aayenge! 🙏</p>
   <button class="outside-back" onclick="goBack()">← Wapas Jao</button>
 </div>
 
-<!-- BANNERS -->
+<!-- ══════════ BANNERS ══════════ -->
 <div class="delivery-banner">
   🚚 Sirf Muzaffarnagar Delivery &nbsp;|&nbsp; Roz Subah Fresh Mandi Stock
   <span>📍 Only Muzaffarnagar</span>
 </div>
 <div class="price-bar" id="priceBar">📅 Aaj ke prices load ho rahe hain...</div>
 
-<!-- NAV -->
+<!-- ══════════ NAV ══════════ -->
 <nav>
   <div class="nav-logo">Veztoo<span>X</span></div>
   <ul class="nav-links">
@@ -219,7 +466,7 @@
   <a class="nav-wa" href="https://wa.me/917409001208?text=Hello%20VeztooX!%20Order%20karna%20hai." target="_blank">💬 Order on WhatsApp</a>
 </nav>
 
-<!-- HERO -->
+<!-- ══════════ HERO ══════════ -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
@@ -228,7 +475,7 @@
     <p class="hero-sub">Mandi se seedha aapke ghar tak — roz subah ki taazi sabzi aur meethe fruits, sirf ek WhatsApp message par. <strong>VeztooX</strong> ke saath khareedna hua aasaan.</p>
     <div class="hero-btns">
       <a class="btn-p" href="https://wa.me/917409001208?text=Hello%20VeztooX!%20Order%20karna%20hai." target="_blank">💬 WhatsApp Par Order Karo</a>
-      <a class="btn-s" href="#products">Aaj Ke Prices Dekho</a>
+      <a class="btn-s" href="#products">🛒 Cart Se Order Karo</a>
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Happy Customers</div></div>
@@ -239,15 +486,39 @@
   </div>
 </section>
 
-<!-- MARQUEE -->
+<!-- ══════════ MARQUEE ══════════ -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <span class="m-item">🍅 Tamatar <span class="m-dot">✦</span></span><span class="m-item">🥔 Aloo <span class="m-dot">✦</span></span><span class="m-item">🧅 Pyaz <span class="m-dot">✦</span></span><span class="m-item">🥕 Gajar <span class="m-dot">✦</span></span><span class="m-item">🍋 Nimbu <span class="m-dot">✦</span></span><span class="m-item">🥭 Aam <span class="m-dot">✦</span></span><span class="m-item">🍌 Kela <span class="m-dot">✦</span></span><span class="m-item">🍎 Seb <span class="m-dot">✦</span></span><span class="m-item">🫛 Matar <span class="m-dot">✦</span></span><span class="m-item">🌿 Dhaniya <span class="m-dot">✦</span></span><span class="m-item">🥒 Kheera <span class="m-dot">✦</span></span><span class="m-item">🍇 Angur <span class="m-dot">✦</span></span>
-    <span class="m-item">🍅 Tamatar <span class="m-dot">✦</span></span><span class="m-item">🥔 Aloo <span class="m-dot">✦</span></span><span class="m-item">🧅 Pyaz <span class="m-dot">✦</span></span><span class="m-item">🥕 Gajar <span class="m-dot">✦</span></span><span class="m-item">🍋 Nimbu <span class="m-dot">✦</span></span><span class="m-item">🥭 Aam <span class="m-dot">✦</span></span><span class="m-item">🍌 Kela <span class="m-dot">✦</span></span><span class="m-item">🍎 Seb <span class="m-dot">✦</span></span><span class="m-item">🫛 Matar <span class="m-dot">✦</span></span><span class="m-item">🌿 Dhaniya <span class="m-dot">✦</span></span><span class="m-item">🥒 Kheera <span class="m-dot">✦</span></span><span class="m-item">🍇 Angur <span class="m-dot">✦</span></span>
+    <span class="m-item">🍅 Tamatar <span class="m-dot">✦</span></span>
+    <span class="m-item">🥔 Aloo <span class="m-dot">✦</span></span>
+    <span class="m-item">🧅 Pyaz <span class="m-dot">✦</span></span>
+    <span class="m-item">🥕 Gajar <span class="m-dot">✦</span></span>
+    <span class="m-item">🍋 Nimbu <span class="m-dot">✦</span></span>
+    <span class="m-item">🥭 Aam <span class="m-dot">✦</span></span>
+    <span class="m-item">🍌 Kela <span class="m-dot">✦</span></span>
+    <span class="m-item">🍎 Seb <span class="m-dot">✦</span></span>
+    <span class="m-item">🫛 Matar <span class="m-dot">✦</span></span>
+    <span class="m-item">🌿 Dhaniya <span class="m-dot">✦</span></span>
+    <span class="m-item">🥒 Kheera <span class="m-dot">✦</span></span>
+    <span class="m-item">🍇 Angur <span class="m-dot">✦</span></span>
+    <span class="m-item">🫙 Paani <span class="m-dot">✦</span></span>
+    <span class="m-item">🍅 Tamatar <span class="m-dot">✦</span></span>
+    <span class="m-item">🥔 Aloo <span class="m-dot">✦</span></span>
+    <span class="m-item">🧅 Pyaz <span class="m-dot">✦</span></span>
+    <span class="m-item">🥕 Gajar <span class="m-dot">✦</span></span>
+    <span class="m-item">🍋 Nimbu <span class="m-dot">✦</span></span>
+    <span class="m-item">🥭 Aam <span class="m-dot">✦</span></span>
+    <span class="m-item">🍌 Kela <span class="m-dot">✦</span></span>
+    <span class="m-item">🍎 Seb <span class="m-dot">✦</span></span>
+    <span class="m-item">🫛 Matar <span class="m-dot">✦</span></span>
+    <span class="m-item">🌿 Dhaniya <span class="m-dot">✦</span></span>
+    <span class="m-item">🥒 Kheera <span class="m-dot">✦</span></span>
+    <span class="m-item">🍇 Angur <span class="m-dot">✦</span></span>
+    <span class="m-item">🫙 Paani <span class="m-dot">✦</span></span>
   </div>
 </div>
 
-<!-- DELIVERY AREA -->
+<!-- ══════════ AREA ══════════ -->
 <section class="area-sec" id="area">
   <div class="area-box">
     <div class="sec-lbl">Delivery Zone</div>
@@ -257,7 +528,10 @@
       <h3>Muzaffarnagar, UP</h3>
       <p style="color:var(--muted);font-size:.9rem;margin-top:4px;">Abhi ke liye sirf Muzaffarnagar city area</p>
       <div class="chips">
-        <span class="chip">🏘️ Civil Lines</span><span class="chip">🏘️ Shastri Nagar</span><span class="chip">🏘️ Mahavir Colony</span><span class="chip">🏘️ Ghanta Ghar</span><span class="chip">🏘️ Jansath Road</span><span class="chip">🏘️ Budhana Road</span><span class="chip">🏘️ Meenakshi Puram</span><span class="chip">+ Aur bhi areas</span>
+        <span class="chip">🏘️ Civil Lines</span><span class="chip">🏘️ Shastri Nagar</span>
+        <span class="chip">🏘️ Mahavir Colony</span><span class="chip">🏘️ Ghanta Ghar</span>
+        <span class="chip">🏘️ Jansath Road</span><span class="chip">🏘️ Budhana Road</span>
+        <span class="chip">🏘️ Meenakshi Puram</span><span class="chip">+ Aur bhi areas</span>
       </div>
     </div>
     <p class="area-note">⚠️ Abhi hum sirf Muzaffarnagar city mein deliver karte hain. Apna area confirm karne ke liye WhatsApp karo!</p>
@@ -265,27 +539,27 @@
   </div>
 </section>
 
-<!-- HOW -->
+<!-- ══════════ HOW IT WORKS ══════════ -->
 <section class="how" id="how">
   <div class="container">
     <div class="sec-lbl">Simple Process</div>
     <div class="sec-title">Sirf 3 Steps Mein<br>Ghar Pe Delivery</div>
-    <p class="sec-sub">Koi app nahi, koi login nahi — bas WhatsApp karo.</p>
+    <p class="sec-sub">Cart mein add karo → WhatsApp pe bhejo → Ghar pe paao!</p>
     <div class="how-grid">
-      <div class="how-card"><div class="how-num">1</div><div class="how-icon">💬</div><h3>WhatsApp Karo</h3><p>Apni list bhejo — "Aloo 2kg, Tamatar 1kg" — itna kaafi hai.</p></div>
-      <div class="how-card"><div class="how-num">2</div><div class="how-icon">✅</div><h3>Price Confirm Karo</h3><p>Hum aaj ka fresh rate bata denge. Confirm karo, order set.</p></div>
-      <div class="how-card"><div class="how-num">3</div><div class="how-icon">🚚</div><h3>Delivery Paao</h3><p>Mandi se seedha ghar tak. Fresh, saaf, correct weight.</p></div>
+      <div class="how-card"><div class="how-num">1</div><div class="how-icon">🛒</div><h3>Cart Mein Add Karo</h3><p>Jo chahiye woh cart mein daalo — quantity khud set karo.</p></div>
+      <div class="how-card"><div class="how-num">2</div><div class="how-icon">💬</div><h3>WhatsApp Bhejo</h3><p>"Order Bhejo" button dabao — pura order automatically WhatsApp pe jayega.</p></div>
+      <div class="how-card"><div class="how-num">3</div><div class="how-icon">✅</div><h3>Confirm Karo</h3><p>Hum price confirm karenge aur delivery time batayenge.</p></div>
       <div class="how-card"><div class="how-num">4</div><div class="how-icon">💰</div><h3>Cash / UPI</h3><p>Delivery pe payment — UPI ya cash. Koi advance nahi.</p></div>
     </div>
   </div>
 </section>
 
-<!-- PRODUCTS -->
+<!-- ══════════ PRODUCTS ══════════ -->
 <section class="products" id="products">
   <div class="container">
     <div class="sec-lbl">Aaj Ka Stock</div>
     <div class="sec-title">Hamare Products</div>
-    <p class="sec-sub">Neeche ke prices aaj ke hain — mandi se fresh aaye hain.</p>
+    <p class="sec-sub">Cart mein add karo aur ek click mein WhatsApp se order karo! 🛒</p>
 
     <div class="price-box">
       <div class="pb-left">
@@ -300,30 +574,16 @@
       <div class="tab" onclick="filterCat('sabzi',this)">🥦 Sabziyan</div>
       <div class="tab" onclick="filterCat('fruit',this)">🍎 Fruits</div>
       <div class="tab" onclick="filterCat('leafy',this)">🌿 Hara</div>
+      <div class="tab" onclick="filterCat('other',this)">🫙 Aur</div>
     </div>
 
     <div class="prod-grid" id="productGrid">
-      <div class="pc" data-cat="sabzi"><span class="em">🍅</span><div class="nm">Tomato / टमाटर</div><div class="pr" id="p-tamatar">…</div><a class="ob" href="https://wa.me/917409001208?text=Tamatar%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="sabzi"><span class="em">🥔</span><div class="nm">Potato / आलू</div><div class="pr" id="p-aloo">…</div><a class="ob" href="https://wa.me/917409001208?text=Aloo%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="sabzi"><span class="em">🧅</span><div class="nm">Onion / प्याज</div><div class="pr" id="p-pyaz">…</div><a class="ob" href="https://wa.me/917409001208?text=Pyaz%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="sabzi"><span class="em">🥕</span><div class="nm">Carrot / गाजर</div><div class="pr" id="p-gajar">…</div><a class="ob" href="https://wa.me/917409001208?text=Gajar%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="sabzi"><span class="em">🫛</span><div class="nm">Peas / मटर</div><div class="pr" id="p-matar">…</div><a class="ob" href="https://wa.me/917409001208?text=Matar%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="sabzi"><span class="em">🥒</span><div class="nm">Cucumber / खीरा</div><div class="pr" id="p-kheera">…</div><a class="ob" href="https://wa.me/917409001208?text=Kheera%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="sabzi"><span class="em">🍆</span><div class="nm">Brinjal / बैंगन</div><div class="pr" id="p-baingan">…</div><a class="ob" href="https://wa.me/917409001208?text=Baingan%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="sabzi"><span class="em">🌶️</span><div class="nm">Chilli / हरी मिर्च</div><div class="pr" id="p-hariMirch">…</div><a class="ob" href="https://wa.me/917409001208?text=Hari%20Mirch%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="fruit"><span class="em">🍌</span><div class="nm">Banana / केला</div><div class="pr" id="p-kela">…</div><a class="ob" href="https://wa.me/917409001208?text=Kela%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="fruit"><span class="em">🍎</span><div class="nm">Apple / सेब</div><div class="pr" id="p-seb">…</div><a class="ob" href="https://wa.me/917409001208?text=Seb%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="fruit"><span class="em">🍋</span><div class="nm">Lemon / नींबू</div><div class="pr" id="p-nimbu">…</div><a class="ob" href="https://wa.me/917409001208?text=Nimbu%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="fruit"><span class="em">🍇</span><div class="nm">Grapes / अंगूर</div><div class="pr" id="p-angur">…</div><a class="ob" href="https://wa.me/917409001208?text=Angur%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="leafy"><span class="em">🌿</span><div class="nm">Coriander / धनिया</div><div class="pr" id="p-dhaniya">…</div><a class="ob" href="https://wa.me/917409001208?text=Dhaniya%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="leafy"><span class="em">🥬</span><div class="nm">Spinach / पालक</div><div class="pr" id="p-palak">…</div><a class="ob" href="https://wa.me/917409001208?text=Palak%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="leafy"><span class="em">🫚</span><div class="nm">Fenugreek / मेथी</div><div class="pr" id="p-methi">…</div><a class="ob" href="https://wa.me/917409001208?text=Methi%20order%20karna%20hai" target="_blank">💬 Order</a></div>
-      <div class="pc" data-cat="leafy"><span class="em">🌱</span><div class="nm">Mint / पुदीना</div><div class="pr" id="p-pudina">…</div><a class="ob" href="https://wa.me/917409001208?text=Pudina%20order%20karna%20hai" target="_blank">💬 Order</a></div>
+      <!-- Products rendered by JS -->
     </div>
   </div>
 </section>
 
-<!-- WHY -->
+<!-- ══════════ WHY ══════════ -->
 <section class="why">
   <div class="container">
     <div class="sec-lbl">Kyun Choose Karein</div>
@@ -333,96 +593,646 @@
       <div class="wc"><div class="wi">🌅</div><h3>Roz Subah Fresh</h3><p>Roz mandi se khareedi hui sabzi — same day delivery. Kal ki basi sabzi nahi.</p></div>
       <div class="wc"><div class="wi">⚖️</div><h3>Sahi Wazan</h3><p>Digital scale se naapa — jo kaha wahi milega, guarantee ke saath.</p></div>
       <div class="wc"><div class="wi">💸</div><h3>Mandi Jaisi Keemat</h3><p>Roz ka sahi rate — koi hidden charges nahi.</p></div>
-      <div class="wc"><div class="wi">📍</div><h3>Sirf Muzaffarnagar</h3><p>Local service — aapko jaante hain, pasand yaad rakhte hain.</p></div>
-      <div class="wc"><div class="wi">📱</div><h3>WhatsApp Easy</h3><p>Koi app nahi, koi login nahi — sirf ek message karo.</p></div>
+      <div class="wc"><div class="wi">🛒</div><h3>Easy Cart System</h3><p>Cart mein add karo, ek click mein pura order WhatsApp pe bhejo!</p></div>
+      <div class="wc"><div class="wi">📱</div><h3>WhatsApp Easy</h3><p>Koi app nahi, koi login nahi — sirf cart bharo aur order karo.</p></div>
       <div class="wc"><div class="wi">🤝</div><h3>Cash / UPI Dono</h3><p>Delivery pe payment — advance bilkul nahi.</p></div>
     </div>
   </div>
 </section>
 
-<!-- REVIEWS -->
+<!-- ══════════ REVIEWS ══════════ -->
 <section class="reviews" id="reviews">
   <div class="container">
     <div class="sec-lbl">Customer Reviews</div>
     <div class="sec-title">Muzaffarnagar Log Kya Kehte Hain</div>
-    <div class="rev-grid">
-      <div class="rc"><div class="stars">★★★★★</div><div class="rt">"Bahut hi fresh sabzi aati hai. Ab roz yahi se mangaate hain — mandi jaane ki zarurat hi nahi rahi."</div><div class="rv"><div class="rav">S</div><div><div class="rnm">Sunita Devi</div><div class="rlc">Civil Lines, Muzaffarnagar</div></div></div></div>
-      <div class="rc"><div class="stars">★★★★★</div><div class="rt">"Ghar baithe delivery bohot sahi hai. VeztooX ne life easy kar di — ek WhatsApp pe sab ho jaata hai!"</div><div class="rv"><div class="rav">R</div><div><div class="rnm">Rahul Sharma</div><div class="rlc">Mahavir Colony, Muzaffarnagar</div></div></div></div>
-      <div class="rc"><div class="stars">★★★★☆</div><div class="rt">"Wazan sahi hota hai, sabzi fresh hoti hai. WhatsApp par seedha baat — isse zyada kya chahiye!"</div><div class="rv"><div class="rav">P</div><div><div class="rnm">Priya Agarwal</div><div class="rlc">Shastri Nagar, Muzaffarnagar</div></div></div></div>
+    <div class="rev-grid" id="revGrid">
+      <!-- rendered by JS -->
+    </div>
+
+    <!-- Review Form -->
+    <div class="review-form-wrap">
+      <div class="review-form-box">
+        <div class="rf-head">
+          <div class="rf-head-icon">✍️</div>
+          <div>
+            <h3>Apna Review Likho</h3>
+            <p>Aapka experience share karo — baaki customers ko madad hogi! 🙏</p>
+          </div>
+        </div>
+        <div class="rf-grid">
+          <div class="rf-field">
+            <label>Aapka Naam *</label>
+            <input type="text" id="rv-name" placeholder="e.g. Rahul Kumar">
+          </div>
+          <div class="rf-field">
+            <label>Aapka Area</label>
+            <input type="text" id="rv-area" placeholder="e.g. Civil Lines">
+          </div>
+        </div>
+        <div class="rf-field">
+          <label>Rating Dein *</label>
+          <div class="star-selector">
+            <input type="radio" name="rating" id="s5" value="5"><label for="s5">★</label>
+            <input type="radio" name="rating" id="s4" value="4"><label for="s4">★</label>
+            <input type="radio" name="rating" id="s3" value="3"><label for="s3">★</label>
+            <input type="radio" name="rating" id="s2" value="2"><label for="s2">★</label>
+            <input type="radio" name="rating" id="s1" value="1"><label for="s1">★</label>
+          </div>
+        </div>
+        <div class="rf-field">
+          <label>Aapka Review *</label>
+          <textarea id="rv-text" rows="3" placeholder="Apna experience likho... Fresh tha? Time pe aaya? Sab theek tha?"></textarea>
+        </div>
+        <button class="rf-submit" onclick="submitReview()">
+          <span>📤</span> Review Submit Karo
+        </button>
+        <div class="rf-success" id="rfSuccess">🎉 Shukriya! Aapka review post ho gaya!</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ══════════ CTA ══════════ -->
 <section class="cta" id="contact">
   <div style="max-width:680px;margin:0 auto;">
     <h2>Aaj Hi Order Karo!</h2>
-    <p>Muzaffarnagar mein fresh sabzi aur fruits ke liye VeztooX sabse acha option hai. Ek message karo — baaki hum sambhal lete hain. 🌿</p>
-    <a class="cta-wa" href="https://wa.me/917409001208?text=Hello%20VeztooX!%20Mujhe%20order%20karna%20hai.%20Aaj%20ka%20rate%20batao." target="_blank"><span class="wi">💬</span> WhatsApp Par Order Karo</a>
+    <p>Cart mein add karo ya seedha WhatsApp karo — Muzaffarnagar mein fresh sabzi aur fruits ke liye VeztooX sabse acha option hai. 🌿</p>
+    <a class="cta-wa" href="https://wa.me/917409001208?text=Hello%20VeztooX!%20Mujhe%20order%20karna%20hai.%20Aaj%20ka%20rate%20batao." target="_blank">
+      <span class="wi">💬</span> WhatsApp Par Order Karo
+    </a>
     <div style="margin-top:24px;color:rgba(255,255,255,.7);font-size:.9rem;">📍 Muzaffarnagar, UP &nbsp;|&nbsp; ⏰ 6 AM – 9 PM Daily</div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ══════════ FOOTER ══════════ -->
 <footer>
   <div class="fg">
     <div class="fb">
       <div class="nav-logo">Veztoo<span>X</span></div>
       <p>Muzaffarnagar ki sabse tazi sabzi aur fruit delivery. Mandi se seedha ghar tak — roz, fresh, sahi wazan.</p>
     </div>
-    <div class="fc"><h4>Quick Links</h4><ul><li><a href="#products">Aaj Ke Prices</a></li><li><a href="#area">Delivery Area</a></li><li><a href="#how">How it Works</a></li><li><a href="https://wa.me/917409001208" target="_blank">WhatsApp Order</a></li></ul></div>
-    <div class="fc"><h4>Contact</h4><ul><li><a href="https://wa.me/917409001208" target="_blank">📱 WhatsApp</a></li><li><a href="#">📍 Muzaffarnagar, UP</a></li><li><a href="#">⏰ 6 AM – 9 PM</a></li><li><a href="#">📧 veztoox@gmail.com</a></li></ul></div>
+    <div class="fc"><h4>Quick Links</h4><ul>
+      <li><a href="#products">Aaj Ke Prices</a></li>
+      <li><a href="#area">Delivery Area</a></li>
+      <li><a href="#how">How it Works</a></li>
+      <li><a href="https://wa.me/917409001208" target="_blank">WhatsApp Order</a></li>
+    </ul></div>
+    <div class="fc"><h4>Contact</h4><ul>
+      <li><a href="https://wa.me/917409001208" target="_blank">📱 WhatsApp</a></li>
+      <li><a href="#">📍 Muzaffarnagar, UP</a></li>
+      <li><a href="#">⏰ 6 AM – 9 PM</a></li>
+      <li><a href="#">📧 veztoox@gmail.com</a></li>
+    </ul></div>
   </div>
-  <div class="fb2"><span>© 2025 VeztooX Enterprises. All rights reserved.</span><span>📍 Proudly serving Muzaffarnagar</span></div>
+  <div class="fb2">
+    <span>© 2025 VeztooX Enterprises. All rights reserved.</span>
+    <span>📍 Proudly serving Muzaffarnagar</span>
+  </div>
 </footer>
 
+<!-- Float WhatsApp -->
 <a class="fwa" href="https://wa.me/917409001208?text=Hello%20VeztooX!%20Order%20karna%20hai." target="_blank">💬</a>
 
+<!-- ══════════ CART FAB ══════════ -->
+<button class="cart-fab" onclick="openCart()" id="cartFab">
+  🛒
+  <span class="cart-count hidden" id="cartCount">0</span>
+</button>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ══════════ CART MODAL ══════════ -->
+<div class="modal-overlay" id="cartModal" onclick="handleOverlayClick(event,'cartModal')">
+  <div class="cart-sheet">
+    <div class="cart-header">
+      <div class="cart-header-left">
+        <h2>🛒 Meri Cart</h2>
+        <span class="cart-item-count" id="cartItemCount">0 items</span>
+      </div>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-body" id="cartBody"></div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-total-row">
+        <div>
+          <div class="ct-label">Kul Total</div>
+          <div class="ct-items" id="cartItemsLabel"></div>
+        </div>
+        <div class="ct-amount" id="cartTotal">₹0</div>
+      </div>
+      <div class="cart-note">💡 Delivery charge WhatsApp pe confirm hoga. Payment COD ya UPI dono chalega!</div>
+      <button class="checkout-btn" onclick="openCheckout()">
+        💬 WhatsApp Pe Order Bhejo
+      </button>
+      <button class="clear-cart-btn" onclick="clearCart()">🗑️ Cart Khali Karo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CHECKOUT MODAL ══════════ -->
+<div class="modal-overlay" id="checkoutModal" onclick="handleOverlayClick(event,'checkoutModal')">
+  <div class="checkout-sheet">
+    <div class="co-head">
+      <h2>📦 Order Details</h2>
+      <button class="co-close" onclick="closeCheckout()">✕</button>
+    </div>
+
+    <!-- Order Summary inside checkout -->
+    <div class="co-order-summary" id="coSummary"></div>
+
+    <div class="co-field">
+      <label>Aapka Naam *</label>
+      <input type="text" id="co-name" placeholder="e.g. Rahul Kumar">
+    </div>
+    <div class="co-field">
+      <label>Delivery Address *</label>
+      <textarea id="co-address" rows="2" placeholder="e.g. House No. 12, Civil Lines, Muzaffarnagar"></textarea>
+    </div>
+    <div class="co-field">
+      <label>Phone Number (optional)</label>
+      <input type="tel" id="co-phone" placeholder="e.g. 9876543210">
+    </div>
+
+    <div class="cod-badge">
+      <span class="cb-icon">💵</span>
+      <div>
+        <strong>Cash on Delivery (COD)</strong>
+        <span>Delivery ke time cash ya UPI se payment karo — advance bilkul nahi!</span>
+      </div>
+    </div>
+
+    <button class="co-submit" onclick="sendWhatsAppOrder()">
+      💬 WhatsApp Pe Order Bhejo
+    </button>
+    <button class="co-back" onclick="closeCheckout()">← Wapas Cart Mein Jao</button>
+  </div>
+</div>
+
 <script>
-// POPUP
-function confirmArea(yes){
-  if(yes){
-    document.getElementById('mznOverlay').style.display='none';
-    sessionStorage.setItem('mzn','yes');
+// ═══════════════════════════════════════
+//  PRODUCT DATA
+// ═══════════════════════════════════════
+const PRODUCTS = [
+  {id:'tamatar',  emoji:'🍅', name:'Tomato / टमाटर',       cat:'sabzi', unit:'kg',     price:20},
+  {id:'aloo',     emoji:'🥔', name:'Potato / आलू',          cat:'sabzi', unit:'kg',     price:30},
+  {id:'pyaz',     emoji:'🧅', name:'Onion / प्याज',         cat:'sabzi', unit:'kg',     price:25},
+  {id:'gajar',    emoji:'🥕', name:'Carrot / गाजर',         cat:'sabzi', unit:'kg',     price:30},
+  {id:'matar',    emoji:'🫛', name:'Peas / मटर',             cat:'sabzi', unit:'kg',     price:60},
+  {id:'kheera',   emoji:'🥒', name:'Cucumber / खीरा',       cat:'sabzi', unit:'kg',     price:20},
+  {id:'baingan',  emoji:'🍆', name:'Brinjal / बैंगन',       cat:'sabzi', unit:'kg',     price:25},
+  {id:'hariMirch',emoji:'🌶️', name:'Chilli / हरी मिर्च',   cat:'sabzi', unit:'kg',     price:40},
+  {id:'kela',     emoji:'🍌', name:'Banana / केला',          cat:'fruit', unit:'dozen',  price:50},
+  {id:'seb',      emoji:'🍎', name:'Apple / सेब',            cat:'fruit', unit:'kg',     price:120},
+  {id:'nimbu',    emoji:'🍋', name:'Lemon / नींबू',          cat:'fruit', unit:'kg',     price:60},
+  {id:'angur',    emoji:'🍇', name:'Grapes / अंगूर',         cat:'fruit', unit:'kg',     price:80},
+  {id:'dhaniya',  emoji:'🌿', name:'Coriander / धनिया',     cat:'leafy', unit:'bunch',  price:10},
+  {id:'palak',    emoji:'🥬', name:'Spinach / पालक',         cat:'leafy', unit:'bunch',  price:15},
+  {id:'methi',    emoji:'🫚', name:'Fenugreek / मेथी',      cat:'leafy', unit:'bunch',  price:10},
+  {id:'pudina',   emoji:'🌱', name:'Mint / पुदीना',          cat:'leafy', unit:'bunch',  price:10},
+  {id:'paani',    emoji:'🫙', name:'Water Bottle / पानी',   cat:'other', unit:'bottle', price:20},
+];
+
+// ═══════════════════════════════════════
+//  CART STATE
+// ═══════════════════════════════════════
+let cart = {};
+
+// ═══════════════════════════════════════
+//  RENDER PRODUCTS
+// ═══════════════════════════════════════
+function renderProducts() {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = PRODUCTS.map(p => `
+    <div class="pc" data-cat="${p.cat}" id="card-${p.id}">
+      <span class="em">${p.emoji}</span>
+      <div class="nm">${p.name}</div>
+      <div class="pr" id="p-${p.id}">₹${p.price}/${p.unit}</div>
+      <div id="btn-${p.id}">
+        <button class="add-cart-btn" onclick="addToCart('${p.id}')">
+          🛒 Cart Mein Add Karo
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════
+//  LOAD PRICES FROM prices.js
+// ═══════════════════════════════════════
+function parsePrice(str) {
+  if (!str) return null;
+  const m = str.match(/\d+(\.\d+)?/);
+  return m ? parseFloat(m[0]) : null;
+}
+
+function loadPrices() {
+  try {
+    const p = VEZTOOX_PRICES;
+    document.getElementById('priceBar').innerHTML =
+      `📅 Aaj ke prices — <strong>${p.lastUpdated}</strong> &nbsp;|&nbsp; Roz subah mandi se update hote hain 🌿`;
+    document.getElementById('priceDate').textContent = p.lastUpdated;
+    const map = {
+      tamatar:p.tamatar, aloo:p.aloo, pyaz:p.pyaz, gajar:p.gajar,
+      matar:p.matar, kheera:p.kheera, baingan:p.baingan, hariMirch:p.hariMirch,
+      kela:p.kela, seb:p.seb, nimbu:p.nimbu, angur:p.angur,
+      dhaniya:p.dhaniya, palak:p.palak, methi:p.methi, pudina:p.pudina
+    };
+    PRODUCTS.forEach(prod => {
+      if (map[prod.id]) {
+        const num = parsePrice(map[prod.id]);
+        if (num) prod.price = num;
+        const el = document.getElementById('p-' + prod.id);
+        if (el) el.textContent = map[prod.id];
+      }
+    });
+  } catch(e) {
+    document.getElementById('priceBar').innerHTML =
+      '📅 Aaj ke prices — WhatsApp par poochh sakte hain!';
+  }
+}
+
+// ═══════════════════════════════════════
+//  CART FUNCTIONS
+// ═══════════════════════════════════════
+function addToCart(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  refreshCardBtn(id);
+  updateBadge();
+  showToast('🛒 Cart mein add ho gaya!');
+  // bump the fab
+  const fab = document.getElementById('cartFab');
+  fab.style.transform = 'scale(1.25)';
+  setTimeout(() => fab.style.transform = '', 200);
+}
+
+function decreaseOnCard(id) {
+  if (!cart[id]) return;
+  cart[id]--;
+  if (cart[id] <= 0) delete cart[id];
+  refreshCardBtn(id);
+  updateBadge();
+  if (document.getElementById('cartModal').classList.contains('open')) renderCartBody();
+}
+
+function increaseOnCard(id) { addToCart(id); }
+
+function refreshCardBtn(id) {
+  const area = document.getElementById('btn-' + id);
+  if (!area) return;
+  const qty = cart[id] || 0;
+  if (qty === 0) {
+    area.innerHTML = `<button class="add-cart-btn" onclick="addToCart('${id}')">🛒 Cart Mein Add Karo</button>`;
   } else {
-    document.getElementById('mznOverlay').style.display='none';
-    document.getElementById('outsideMsg').classList.add('show');
+    area.innerHTML = `
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="decreaseOnCard('${id}')">−</button>
+        <span class="qty-num">${qty}</span>
+        <button class="qty-btn" onclick="increaseOnCard('${id}')">+</button>
+      </div>`;
   }
 }
-function goBack(){
-  document.getElementById('outsideMsg').classList.remove('show');
-  document.getElementById('mznOverlay').style.display='flex';
-}
-if(sessionStorage.getItem('mzn')==='yes') document.getElementById('mznOverlay').style.display='none';
 
-// LOAD PRICES
-function loadPrices(){
-  try{
-    const p=VEZTOOX_PRICES;
-    document.getElementById('priceBar').innerHTML=`📅 Aaj ke prices — <strong>${p.lastUpdated}</strong> &nbsp;|&nbsp; Roz subah mandi se update hote hain 🌿`;
-    document.getElementById('priceDate').textContent=p.lastUpdated;
-    const m={'p-tamatar':p.tamatar,'p-aloo':p.aloo,'p-pyaz':p.pyaz,'p-gajar':p.gajar,'p-matar':p.matar,'p-kheera':p.kheera,'p-baingan':p.baingan,'p-hariMirch':p.hariMirch,'p-kela':p.kela,'p-seb':p.seb,'p-nimbu':p.nimbu,'p-angur':p.angur,'p-dhaniya':p.dhaniya,'p-palak':p.palak,'p-methi':p.methi,'p-pudina':p.pudina};
-    for(const[id,val] of Object.entries(m)){const el=document.getElementById(id);if(el&&val)el.textContent=val;}
-  }catch(e){
-    document.getElementById('priceBar').innerHTML='📅 Aaj ke prices — WhatsApp par poochh sakte hain!';
+function updateBadge() {
+  const total = Object.values(cart).reduce((a,b)=>a+b, 0);
+  const badge = document.getElementById('cartCount');
+  if (total > 0) {
+    badge.textContent = total;
+    badge.classList.remove('hidden');
+    badge.classList.remove('bump');
+    void badge.offsetWidth;
+    badge.classList.add('bump');
+  } else {
+    badge.classList.add('hidden');
+  }
+  if (document.getElementById('cartModal').classList.contains('open')) renderCartBody();
+}
+
+function clearCart() {
+  if (!confirm('Puri cart khali karein?')) return;
+  cart = {};
+  PRODUCTS.forEach(p => refreshCardBtn(p.id));
+  updateBadge();
+  renderCartBody();
+}
+
+// ═══════════════════════════════════════
+//  CART MODAL
+// ═══════════════════════════════════════
+function openCart() {
+  renderCartBody();
+  document.getElementById('cartModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  document.getElementById('cartModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderCartBody() {
+  const body = document.getElementById('cartBody');
+  const footer = document.getElementById('cartFooter');
+  const countEl = document.getElementById('cartItemCount');
+  const ids = Object.keys(cart);
+
+  if (ids.length === 0) {
+    body.innerHTML = `
+      <div class="cart-empty">
+        <span class="ce-emoji">🛒</span>
+        <h3>Cart Khali Hai!</h3>
+        <p>Products dekho aur apni pasand ki cheezein add karo.</p>
+        <button class="go-shop-btn" onclick="closeCart();document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+          🛍️ Products Dekho
+        </button>
+      </div>`;
+    footer.style.display = 'none';
+    countEl.textContent = '0 items';
+    return;
+  }
+
+  let total = 0;
+  let totalQty = 0;
+  body.innerHTML = ids.map(id => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return '';
+    const qty = cart[id];
+    const sub = p.price * qty;
+    total += sub; totalQty += qty;
+    return `
+      <div class="cart-item">
+        <div class="ci-emoji">${p.emoji}</div>
+        <div class="ci-info">
+          <div class="ci-name">${p.name}</div>
+          <div class="ci-rate">₹${p.price} / ${p.unit}</div>
+          <div class="ci-qty-row">
+            <button class="ci-qty-btn" onclick="cartChange('${id}',-1)">−</button>
+            <span class="ci-qty-num">${qty}</span>
+            <button class="ci-qty-btn" onclick="cartChange('${id}',1)">+</button>
+            <span class="ci-unit">${p.unit}</span>
+          </div>
+        </div>
+        <div class="ci-right">
+          <div class="ci-subtotal">₹${sub}</div>
+          <button class="ci-del" onclick="removeItem('${id}')" title="Hatao">🗑️</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  countEl.textContent = totalQty + ' item' + (totalQty > 1 ? 's' : '');
+  document.getElementById('cartTotal').textContent = '₹' + total;
+  document.getElementById('cartItemsLabel').textContent = ids.length + ' product';
+  footer.style.display = 'block';
+}
+
+function cartChange(id, delta) {
+  cart[id] = (cart[id] || 0) + delta;
+  if (cart[id] <= 0) delete cart[id];
+  refreshCardBtn(id);
+  updateBadge();
+  renderCartBody();
+}
+
+function removeItem(id) {
+  delete cart[id];
+  refreshCardBtn(id);
+  updateBadge();
+  renderCartBody();
+}
+
+// ═══════════════════════════════════════
+//  CHECKOUT MODAL
+// ═══════════════════════════════════════
+function openCheckout() {
+  // Build order summary
+  const ids = Object.keys(cart);
+  let total = 0;
+  const lines = ids.map(id => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return '';
+    const qty = cart[id];
+    const sub = p.price * qty;
+    total += sub;
+    return `<div class="co-item-line">
+      <span class="co-item-name">${p.emoji} ${p.name.split('/')[0].trim()} × ${qty} ${p.unit}</span>
+      <span class="co-item-price">₹${sub}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('coSummary').innerHTML = `
+    <h4>📦 Aapka Order</h4>
+    ${lines}
+    <div class="co-total-line">
+      <span>💰 Kul Total</span>
+      <span>₹${total}</span>
+    </div>`;
+
+  closeCart();
+  setTimeout(() => {
+    document.getElementById('checkoutModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }, 320);
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutModal').classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => openCart(), 200);
+}
+
+function sendWhatsAppOrder() {
+  const name    = document.getElementById('co-name').value.trim();
+  const address = document.getElementById('co-address').value.trim();
+  const phone   = document.getElementById('co-phone').value.trim();
+
+  if (!name)    { alert('⚠️ Kripya apna naam likhein!'); return; }
+  if (!address) { alert('⚠️ Kripya delivery address likhein!'); return; }
+
+  const ids = Object.keys(cart);
+  if (ids.length === 0) { alert('Cart khali hai!'); return; }
+
+  let itemLines = '';
+  let total = 0;
+  ids.forEach(id => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return;
+    const qty = cart[id];
+    const sub = p.price * qty;
+    total += sub;
+    itemLines += `  • ${p.emoji} ${p.name.split('/')[0].trim()} × ${qty} ${p.unit} — ₹${sub}\n`;
+  });
+
+  const phoneNote = phone ? `\n📞 *Phone:* ${phone}` : '';
+
+  const msg =
+`🙏 Hello VeztooX!
+
+━━━━━━━━━━━━━━━━━━
+🛒 *MERA ORDER*
+━━━━━━━━━━━━━━━━━━
+
+${itemLines}
+💰 *Kul Total: ₹${total}*
+━━━━━━━━━━━━━━━━━━
+
+👤 *Naam:* ${name}
+📍 *Address:* ${address}${phoneNote}
+
+💳 *Payment:* Cash on Delivery (COD)
+
+Please mera order confirm karo! 🙏
+VeztooX par trust ke liye shukriya! 🌿`;
+
+  const waUrl = `https://wa.me/917409001208?text=${encodeURIComponent(msg)}`;
+  window.open(waUrl, '_blank');
+
+  // Reset
+  document.getElementById('checkoutModal').classList.remove('open');
+  document.body.style.overflow = '';
+  cart = {};
+  PRODUCTS.forEach(p => refreshCardBtn(p.id));
+  updateBadge();
+  document.getElementById('co-name').value = '';
+  document.getElementById('co-address').value = '';
+  document.getElementById('co-phone').value = '';
+}
+
+function handleOverlayClick(e, id) {
+  if (e.target.id === id) {
+    if (id === 'cartModal') closeCart();
+    else { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
   }
 }
-loadPrices();
 
-// FILTER
-function filterCat(cat,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+// ═══════════════════════════════════════
+//  FILTER
+// ═══════════════════════════════════════
+function filterCat(cat, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  document.querySelectorAll('#productGrid .pc').forEach(c=>{
-    (cat==='all'||c.dataset.cat===cat)?c.classList.remove('hidden'):c.classList.add('hidden');
+  document.querySelectorAll('#productGrid .pc').forEach(c => {
+    (cat === 'all' || c.dataset.cat === cat) ? c.classList.remove('hidden') : c.classList.add('hidden');
   });
 }
 
-// SCROLL ANIM
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach((e,i)=>{if(e.isIntersecting){e.target.style.animation=`fadeUp 0.45s ease ${i*.05}s both`;obs.unobserve(e.target);}});
-},{threshold:.1});
-document.querySelectorAll('.pc,.how-card,.wc,.rc').forEach(el=>obs.observe(el));
+// ═══════════════════════════════════════
+//  POPUP
+// ═══════════════════════════════════════
+function confirmArea(yes) {
+  if (yes) {
+    document.getElementById('mznOverlay').style.display = 'none';
+    sessionStorage.setItem('mzn', 'yes');
+  } else {
+    document.getElementById('mznOverlay').style.display = 'none';
+    document.getElementById('outsideMsg').classList.add('show');
+  }
+}
+function goBack() {
+  document.getElementById('outsideMsg').classList.remove('show');
+  document.getElementById('mznOverlay').style.display = 'flex';
+}
+if (sessionStorage.getItem('mzn') === 'yes') {
+  document.getElementById('mznOverlay').style.display = 'none';
+}
+
+// ═══════════════════════════════════════
+//  REVIEWS
+// ═══════════════════════════════════════
+const DEFAULT_REVIEWS = [
+  {name:'Sunita Devi',  area:'Civil Lines, Muzaffarnagar',    rating:5, text:'Bahut hi fresh sabzi aati hai. Ab roz yahi se mangaate hain — mandi jaane ki zarurat hi nahi rahi.'},
+  {name:'Rahul Sharma', area:'Mahavir Colony, Muzaffarnagar', rating:5, text:'Ghar baithe delivery bohot sahi hai. VeztooX ne life easy kar di — ek WhatsApp pe sab ho jaata hai!'},
+  {name:'Priya Agarwal',area:'Shastri Nagar, Muzaffarnagar',  rating:4, text:'Wazan sahi hota hai, sabzi fresh hoti hai. WhatsApp par seedha baat — isse zyada kya chahiye!'},
+];
+
+function getStoredReviews() {
+  try { return JSON.parse(localStorage.getItem('vzx_reviews') || '[]'); }
+  catch { return []; }
+}
+
+function renderReviews() {
+  const grid = document.getElementById('revGrid');
+  const userRevs = getStoredReviews();
+  const all = [
+    ...userRevs.map(r => ({...r, isUser:true})),
+    ...DEFAULT_REVIEWS.map(r => ({...r, isUser:false}))
+  ];
+  grid.innerHTML = all.map(r => {
+    const filled = '★'.repeat(r.rating);
+    const empty  = '☆'.repeat(5 - r.rating);
+    return `
+      <div class="rc ${r.isUser ? 'user-review' : ''}">
+        <div class="stars">${filled}${empty}</div>
+        <div class="rt">"${r.text}"</div>
+        <div class="rv">
+          <div class="rav">${r.name.charAt(0).toUpperCase()}</div>
+          <div>
+            <div class="rnm">${r.name}</div>
+            <div class="rlc">${r.area || 'Muzaffarnagar'}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function submitReview() {
+  const name  = document.getElementById('rv-name').value.trim();
+  const area  = document.getElementById('rv-area').value.trim();
+  const text  = document.getElementById('rv-text').value.trim();
+  const rEl   = document.querySelector('input[name="rating"]:checked');
+
+  if (!name)  { alert('⚠️ Naam likhna zaroori hai!'); return; }
+  if (!rEl)   { alert('⚠️ Rating zaroor dein!'); return; }
+  if (!text)  { alert('⚠️ Review likhna zaroori hai!'); return; }
+
+  const review = { name, area: area || 'Muzaffarnagar', rating: parseInt(rEl.value), text };
+  const stored = getStoredReviews();
+  stored.unshift(review);
+  localStorage.setItem('vzx_reviews', JSON.stringify(stored.slice(0, 30)));
+  renderReviews();
+
+  // Reset form
+  document.getElementById('rv-name').value = '';
+  document.getElementById('rv-area').value = '';
+  document.getElementById('rv-text').value = '';
+  document.querySelectorAll('input[name="rating"]').forEach(i => i.checked = false);
+
+  const suc = document.getElementById('rfSuccess');
+  suc.style.display = 'block';
+  setTimeout(() => suc.style.display = 'none', 3500);
+  document.getElementById('revGrid').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ═══════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ═══════════════════════════════════════
+//  SCROLL ANIMATION
+// ═══════════════════════════════════════
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      e.target.style.animation = `fadeUp 0.45s ease ${i * 0.06}s both`;
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderProducts();
+  loadPrices();
+  renderReviews();
+  document.querySelectorAll('.how-card,.wc').forEach(el => obs.observe(el));
+});
 </script>
 </body>
 </html>
