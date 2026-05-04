@@ -3,31 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VeztooX — Fresh Sabzi & Fruits Delivery in Muzaffarnagar</title>
+
+  <title>VeztooX — Fresh Sabzi & Fruits Delivery | Muzaffarnagar</title>
   <meta name="description" content="VeztooX brings fresh sabzi and fruits from mandi to your home in Muzaffarnagar. Order easily via WhatsApp." />
   <meta name="theme-color" content="#146b36" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
 
   <script src="prices.js"></script>
 
   <style>
     :root{
       --green:#146b36;
-      --green2:#25a85a;
+      --green2:#24a85a;
       --green3:#e8f8ee;
       --orange:#ff7a1a;
+      --orange2:#e65d00;
       --yellow:#ffd84d;
       --cream:#fff8ec;
       --white:#ffffff;
       --dark:#10170f;
       --text:#273020;
-      --muted:#6d7565;
-      --line:rgba(20,107,54,.12);
+      --muted:#6f7768;
+      --line:rgba(20,107,54,.14);
       --wa:#25D366;
       --wa2:#128C7E;
-      --glass:rgba(255,255,255,.72);
       --shadow:0 18px 55px rgba(16,23,15,.12);
       --shadow2:0 12px 35px rgba(20,107,54,.18);
       --radius:24px;
@@ -43,17 +44,16 @@
     }
     a{text-decoration:none;color:inherit}
     button,input,textarea{font-family:inherit}
-    ::selection{background:var(--green);color:#fff}
-
+    button{cursor:pointer}
     .container{max-width:1180px;margin:auto;padding:0 22px}
     .hide{display:none!important}
 
-    /* TOP BANNER */
+    /* TOP BARS */
     .topbar{
       background:linear-gradient(90deg,var(--green),#0e4f2a);
       color:#fff;
       font-size:.88rem;
-      font-weight:700;
+      font-weight:800;
       padding:10px 18px;
       text-align:center;
       display:flex;
@@ -69,22 +69,21 @@
       border-radius:999px;
       font-size:.78rem;
     }
-
     .pricebar{
       background:var(--orange);
       color:#fff;
       text-align:center;
       padding:9px 18px;
       font-size:.86rem;
-      font-weight:600;
+      font-weight:700;
     }
 
     /* NAV */
     .nav{
       position:sticky;
       top:0;
-      z-index:500;
-      background:rgba(255,248,236,.82);
+      z-index:700;
+      background:rgba(255,248,236,.88);
       backdrop-filter:blur(18px);
       border-bottom:1px solid var(--line);
     }
@@ -104,7 +103,8 @@
       font-weight:900;
     }
     .brand-mark{
-      width:43px;height:43px;
+      width:43px;
+      height:43px;
       border-radius:15px;
       background:linear-gradient(135deg,var(--green),var(--green2));
       color:#fff;
@@ -125,7 +125,7 @@
       display:block;
       font-size:.68rem;
       color:var(--muted);
-      font-weight:800;
+      font-weight:900;
       letter-spacing:.8px;
       text-transform:uppercase;
       margin-top:2px;
@@ -135,21 +135,19 @@
       align-items:center;
       gap:22px;
       list-style:none;
-      font-weight:700;
+      font-weight:800;
       font-size:.9rem;
       color:var(--text);
     }
     .nav-links a:hover{color:var(--green)}
-    .nav-actions{display:flex;align-items:center;gap:10px}
     .wa-btn,.ghost-btn,.primary-btn{
       border:none;
-      cursor:pointer;
       border-radius:999px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:8px;
-      font-weight:800;
+      font-weight:900;
       transition:.2s;
       white-space:nowrap;
     }
@@ -174,17 +172,16 @@
       box-shadow:var(--shadow2);
     }
     .primary-btn:hover{transform:translateY(-3px)}
-
     @media(max-width:850px){
       .nav-links{display:none}
       .wa-btn span{display:none}
     }
 
-    /* LOCATION POPUP */
+    /* AREA POPUP */
     .area-overlay{
       position:fixed;
       inset:0;
-      z-index:3000;
+      z-index:4000;
       background:rgba(0,0,0,.68);
       display:flex;
       align-items:center;
@@ -206,10 +203,15 @@
     .area-card:before{
       content:"";
       position:absolute;
-      inset:-80px -70px auto auto;
-      width:190px;height:190px;
+      top:-80px;
+      right:-70px;
+      width:190px;
+      height:190px;
       background:radial-gradient(circle,var(--green3),transparent 70%);
+      pointer-events:none;
+      z-index:0;
     }
+    .area-card > *{position:relative;z-index:2}
     .pin-big{font-size:3.4rem;margin-bottom:10px}
     .area-card h2{
       font-family:'Playfair Display',serif;
@@ -239,7 +241,6 @@
       border-radius:999px;
       border:none;
       font-weight:900;
-      cursor:pointer;
       transition:.2s;
     }
     .area-yes{background:var(--green);color:#fff}
@@ -250,8 +251,8 @@
     .outside{
       position:fixed;
       inset:0;
-      z-index:3100;
-      background:linear-gradient(135deg,var(--orange),#d95400);
+      z-index:4100;
+      background:linear-gradient(135deg,var(--orange),var(--orange2));
       color:#fff;
       display:none;
       align-items:center;
@@ -275,7 +276,6 @@
       padding:12px 24px;
       border-radius:999px;
       font-weight:900;
-      cursor:pointer;
     }
 
     /* HERO */
@@ -286,7 +286,7 @@
       background:
         radial-gradient(circle at 15% 20%,rgba(37,168,90,.18),transparent 32%),
         radial-gradient(circle at 85% 10%,rgba(255,122,26,.18),transparent 30%),
-        linear-gradient(180deg,#fff8ec 0%,#f4ffeF 100%);
+        linear-gradient(180deg,#fff8ec 0%,#f4ffef 100%);
       display:flex;
       align-items:center;
       padding:70px 0;
@@ -313,7 +313,9 @@
       letter-spacing:.8px;
     }
     .live-dot{
-      width:8px;height:8px;border-radius:50%;
+      width:8px;
+      height:8px;
+      border-radius:50%;
       background:var(--green2);
       box-shadow:0 0 0 6px rgba(37,168,90,.15);
       animation:pulse 1.6s infinite;
@@ -350,7 +352,6 @@
       gap:8px;
       flex-wrap:wrap;
     }
-
     .hero-visual{
       position:relative;
       min-height:520px;
@@ -359,7 +360,7 @@
     }
     .fresh-card{
       width:min(430px,100%);
-      background:rgba(255,255,255,.8);
+      background:rgba(255,255,255,.82);
       backdrop-filter:blur(18px);
       border:1px solid rgba(255,255,255,.85);
       border-radius:38px;
@@ -414,16 +415,8 @@
     .stat span{
       color:var(--muted);
       font-size:.75rem;
-      font-weight:800;
+      font-weight:900;
     }
-    .orb{
-      position:absolute;
-      border-radius:50%;
-      filter:blur(.1px);
-      opacity:.95;
-    }
-    .orb.one{width:95px;height:95px;background:var(--yellow);top:45px;right:40px;animation:orbit 8s linear infinite}
-    .orb.two{width:70px;height:70px;background:#b6f2c8;bottom:70px;left:20px;animation:orbit 10s linear reverse infinite}
     .mini-float{
       position:absolute;
       z-index:3;
@@ -438,7 +431,6 @@
     }
     .mini-float.a{top:95px;left:0}
     .mini-float.b{right:0;bottom:105px;animation-delay:.8s;color:var(--orange)}
-
     @media(max-width:900px){
       .hero{padding:54px 0}
       .hero-grid{grid-template-columns:1fr;text-align:center}
@@ -470,7 +462,7 @@
     }
     .marquee i{font-style:normal;color:var(--yellow)}
 
-    /* SECTION COMMON */
+    /* COMMON */
     section{padding:78px 0}
     .section-head{
       display:flex;
@@ -518,11 +510,7 @@
       gap:15px;
       margin-bottom:22px;
     }
-    .price-box-left{
-      display:flex;
-      align-items:center;
-      gap:13px;
-    }
+    .price-box-left{display:flex;align-items:center;gap:13px}
     .price-box-icon{
       width:48px;height:48px;
       border-radius:17px;
@@ -556,7 +544,6 @@
       padding:10px 18px;
       border-radius:999px;
       font-weight:900;
-      cursor:pointer;
       transition:.2s;
     }
     .tab.active,.tab:hover{
@@ -579,20 +566,11 @@
       position:relative;
       overflow:hidden;
     }
-    .product-card:before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(135deg,rgba(20,107,54,.08),transparent 45%);
-      opacity:0;
-      transition:.22s;
-    }
     .product-card:hover{
       transform:translateY(-6px);
       box-shadow:0 18px 40px rgba(16,23,15,.1);
       border-color:rgba(20,107,54,.22);
     }
-    .product-card:hover:before{opacity:1}
     .p-emoji{
       font-size:3.15rem;
       display:block;
@@ -625,7 +603,6 @@
       padding:10px;
       border-radius:14px;
       font-weight:900;
-      cursor:pointer;
       transition:.18s;
       position:relative;
     }
@@ -648,86 +625,14 @@
       color:var(--green);
       font-size:1.2rem;
       font-weight:900;
-      cursor:pointer;
     }
     .qty-control button:hover{background:var(--green3)}
-    .qty-control span{
-      flex:1;
-      font-weight:900;
-      color:var(--dark);
-    }
-
-    /* HOW / WHY */
-    .how{
-      background:
-        radial-gradient(circle at 10% 10%,rgba(255,122,26,.09),transparent 25%),
-        var(--cream);
-    }
-    .steps{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-      gap:18px;
-    }
-    .step-card,.why-card,.faq-card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:24px;
-      box-shadow:0 12px 32px rgba(16,23,15,.05);
-      transition:.22s;
-    }
-    .step-card:hover,.why-card:hover,.faq-card:hover{
-      transform:translateY(-5px);
-      box-shadow:var(--shadow);
-    }
-    .step-no{
-      font-family:'Playfair Display',serif;
-      font-size:3rem;
-      color:rgba(20,107,54,.13);
-      font-weight:900;
-      line-height:1;
-      margin-bottom:8px;
-    }
-    .step-icon,.why-icon{font-size:2rem;margin-bottom:10px}
-    .step-card h3,.why-card h3,.faq-card h3{
-      color:var(--dark);
-      font-size:1.05rem;
-      margin-bottom:8px;
-    }
-    .step-card p,.why-card p,.faq-card p{
-      color:var(--muted);
-      line-height:1.65;
-      font-size:.9rem;
-    }
-
-    .why{
-      background:linear-gradient(135deg,var(--green),#0f4d29);
-      color:#fff;
-    }
-    .why .title{color:#fff}
-    .why .subtitle{color:rgba(255,255,255,.75)}
-    .why .label{color:var(--yellow)}
-    .why-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(235px,1fr));
-      gap:18px;
-    }
-    .why-card{
-      background:rgba(255,255,255,.09);
-      border-color:rgba(255,255,255,.16);
-      box-shadow:none;
-    }
-    .why-card h3{color:#fff}
-    .why-card p{color:rgba(255,255,255,.72)}
+    .qty-control span{flex:1;font-weight:900;color:var(--dark)}
 
     /* AREA */
-    .area{
-      background:#fff;
-    }
+    .area{background:var(--cream)}
     .area-box{
-      background:
-        radial-gradient(circle at 20% 20%,rgba(37,168,90,.15),transparent 28%),
-        linear-gradient(135deg,#fff,var(--green3));
+      background:linear-gradient(135deg,#fff,var(--green3));
       border:1px solid var(--line);
       border-radius:34px;
       padding:36px;
@@ -770,20 +675,54 @@
       .area-box{grid-template-columns:1fr;padding:24px}
     }
 
-    /* REVIEWS / FAQ */
-    .reviews{background:var(--cream)}
-    .review-grid{
+    /* HOW / WHY */
+    .how{background:#fff}
+    .steps,.why-grid,.review-grid,.faq-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(235px,1fr));
       gap:18px;
     }
-    .review-card{
+    .card{
       background:#fff;
       border:1px solid var(--line);
       border-radius:var(--radius);
       padding:24px;
-      box-shadow:0 12px 30px rgba(16,23,15,.05);
+      box-shadow:0 12px 32px rgba(16,23,15,.05);
+      transition:.22s;
     }
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:var(--shadow);
+    }
+    .step-no{
+      font-family:'Playfair Display',serif;
+      font-size:3rem;
+      color:rgba(20,107,54,.13);
+      font-weight:900;
+      line-height:1;
+      margin-bottom:8px;
+    }
+    .card-icon{font-size:2rem;margin-bottom:10px}
+    .card h3{color:var(--dark);font-size:1.05rem;margin-bottom:8px}
+    .card p{color:var(--muted);line-height:1.65;font-size:.9rem}
+
+    .why{
+      background:linear-gradient(135deg,var(--green),#0f4d29);
+      color:#fff;
+    }
+    .why .title{color:#fff}
+    .why .subtitle{color:rgba(255,255,255,.75)}
+    .why .label{color:var(--yellow)}
+    .why .card{
+      background:rgba(255,255,255,.09);
+      border-color:rgba(255,255,255,.16);
+      box-shadow:none;
+    }
+    .why .card h3{color:#fff}
+    .why .card p{color:rgba(255,255,255,.72)}
+
+    /* REVIEWS */
+    .reviews{background:var(--cream)}
     .stars{color:var(--orange);letter-spacing:2px;font-size:1.08rem;margin-bottom:12px}
     .review-text{
       color:var(--text);
@@ -809,18 +748,9 @@
     .person-name{font-weight:900;color:var(--dark);font-size:.9rem}
     .person-area{color:var(--muted);font-size:.78rem}
 
-    .faq{background:#fff}
-    .faq-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:18px;
-    }
-
     /* CTA */
     .cta{
-      background:
-        radial-gradient(circle at 20% 20%,rgba(255,216,77,.3),transparent 26%),
-        linear-gradient(135deg,var(--orange),#d95400);
+      background:linear-gradient(135deg,var(--orange),var(--orange2));
       text-align:center;
       color:#fff;
     }
@@ -835,11 +765,7 @@
       max-width:650px;
       margin:0 auto 25px;
     }
-    .cta .wa-btn{
-      background:#fff;
-      color:var(--green);
-      padding:14px 26px;
-    }
+    .cta .wa-btn{background:#fff;color:var(--green);padding:14px 26px}
 
     /* FOOTER */
     footer{
@@ -860,17 +786,8 @@
       color:rgba(255,255,255,.56);
       font-size:.9rem;
     }
-    .footer-col h4{
-      color:#fff;
-      margin-bottom:12px;
-      font-size:.95rem;
-    }
-    .footer-col ul{
-      list-style:none;
-      display:grid;
-      gap:9px;
-      font-size:.88rem;
-    }
+    .footer-col h4{color:#fff;margin-bottom:12px;font-size:.95rem}
+    .footer-col ul{list-style:none;display:grid;gap:9px;font-size:.88rem}
     .footer-col a{color:rgba(255,255,255,.58)}
     .footer-col a:hover{color:#fff}
     .footer-bottom{
@@ -884,31 +801,31 @@
       color:rgba(255,255,255,.42);
       font-size:.8rem;
     }
-    @media(max-width:750px){
-      .footer-grid{grid-template-columns:1fr}
-    }
+    @media(max-width:750px){.footer-grid{grid-template-columns:1fr}}
 
-    /* CART FLOAT */
+    /* FLOATS */
     .cart-fab{
       position:fixed;
       left:22px;
       bottom:24px;
       z-index:900;
-      width:62px;height:62px;
+      width:62px;
+      height:62px;
       border-radius:50%;
       border:none;
       background:linear-gradient(135deg,var(--orange),#ff9a4a);
       color:#fff;
       font-size:1.55rem;
       box-shadow:0 14px 34px rgba(255,122,26,.4);
-      cursor:pointer;
       transition:.2s;
     }
     .cart-fab:hover{transform:scale(1.08)}
     .cart-count{
       position:absolute;
-      top:-6px;right:-6px;
-      width:25px;height:25px;
+      top:-6px;
+      right:-6px;
+      width:25px;
+      height:25px;
       border-radius:50%;
       background:var(--green);
       color:#fff;
@@ -918,13 +835,13 @@
       font-size:.72rem;
       font-weight:900;
     }
-
     .float-wa{
       position:fixed;
       right:22px;
       bottom:24px;
       z-index:850;
-      width:60px;height:60px;
+      width:60px;
+      height:60px;
       border-radius:50%;
       background:var(--wa);
       color:#fff;
@@ -935,11 +852,11 @@
       animation:float2 3.3s ease-in-out infinite;
     }
 
-    /* DRAWERS / MODALS */
+    /* MODALS */
     .overlay{
       position:fixed;
       inset:0;
-      z-index:2000;
+      z-index:2500;
       background:rgba(0,0,0,.55);
       backdrop-filter:blur(7px);
       display:flex;
@@ -949,10 +866,7 @@
       pointer-events:none;
       transition:.28s;
     }
-    .overlay.open{
-      opacity:1;
-      pointer-events:all;
-    }
+    .overlay.open{opacity:1;pointer-events:all}
     .sheet{
       width:min(610px,100%);
       max-height:90vh;
@@ -979,12 +893,12 @@
       font-size:1.35rem;
     }
     .x-btn{
-      width:38px;height:38px;
+      width:38px;
+      height:38px;
       border:none;
       border-radius:50%;
       background:#f5f5f5;
       color:var(--muted);
-      cursor:pointer;
       font-size:1.1rem;
       font-weight:900;
     }
@@ -994,10 +908,7 @@
       overflow:auto;
       flex:1;
     }
-    .empty{
-      text-align:center;
-      padding:46px 20px;
-    }
+    .empty{text-align:center;padding:46px 20px}
     .empty .emoji{font-size:4rem;margin-bottom:10px}
     .empty h3{
       font-family:'Playfair Display',serif;
@@ -1030,13 +941,13 @@
       margin-top:9px;
     }
     .ci-controls button{
-      width:30px;height:30px;
+      width:30px;
+      height:30px;
       border:none;
       border-radius:50%;
       background:var(--green3);
       color:var(--green);
       font-weight:900;
-      cursor:pointer;
       font-size:1rem;
     }
     .ci-controls button:hover{background:var(--green);color:#fff}
@@ -1050,7 +961,6 @@
       color:#d33;
       border-radius:10px;
       padding:5px 8px;
-      cursor:pointer;
     }
     .sheet-foot{
       border-top:1px solid #f1f1f1;
@@ -1085,7 +995,6 @@
       background:#fff;
       color:#d33;
       font-weight:800;
-      cursor:pointer;
       padding:8px;
     }
 
@@ -1124,7 +1033,6 @@
       border-bottom:1px solid rgba(0,0,0,.05);
       font-size:.9rem;
     }
-    .sum-line:last-child{border-bottom:0}
     .sum-total{
       display:flex;
       justify-content:space-between;
@@ -1161,7 +1069,7 @@
       box-shadow:0 0 0 4px rgba(20,107,54,.08);
     }
 
-    /* JARVIS BOT */
+    /* JARVIS */
     .jarvis{
       position:fixed;
       right:22px;
@@ -1169,11 +1077,11 @@
       z-index:1200;
     }
     .jarvis-orb{
-      width:66px;height:66px;
+      width:66px;
+      height:66px;
       border:none;
       border-radius:50%;
       color:#fff;
-      cursor:pointer;
       background:
         radial-gradient(circle at 35% 28%,#b8ffd0 0 8%,transparent 9%),
         conic-gradient(from 120deg,var(--green),var(--green2),var(--orange),var(--green));
@@ -1203,7 +1111,7 @@
       bottom:82px;
       width:min(370px,calc(100vw - 44px));
       height:560px;
-      background:rgba(255,255,255,.88);
+      background:rgba(255,255,255,.92);
       backdrop-filter:blur(18px);
       border:1px solid rgba(255,255,255,.8);
       border-radius:28px;
@@ -1224,13 +1132,10 @@
       align-items:center;
       gap:10px;
     }
-    .bot-id{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
+    .bot-id{display:flex;align-items:center;gap:10px}
     .bot-avatar{
-      width:42px;height:42px;
+      width:42px;
+      height:42px;
       border-radius:16px;
       background:rgba(255,255,255,.17);
       display:grid;
@@ -1249,25 +1154,20 @@
     }
     .bot-close{
       border:none;
-      width:34px;height:34px;
+      width:34px;
+      height:34px;
       border-radius:50%;
       background:rgba(255,255,255,.14);
       color:#fff;
-      cursor:pointer;
       font-weight:900;
     }
     .bot-body{
       flex:1;
       overflow:auto;
       padding:14px;
-      background:
-        radial-gradient(circle at 20% 0,rgba(37,168,90,.12),transparent 25%),
-        #fffaf2;
+      background:#fffaf2;
     }
-    .msg{
-      display:flex;
-      margin:9px 0;
-    }
+    .msg{display:flex;margin:9px 0}
     .msg.user{justify-content:flex-end}
     .bubble{
       max-width:82%;
@@ -1304,12 +1204,8 @@
       padding:7px 10px;
       font-size:.78rem;
       font-weight:900;
-      cursor:pointer;
     }
-    .quick button:hover{
-      background:var(--green);
-      color:#fff;
-    }
+    .quick button:hover{background:var(--green);color:#fff}
     .bot-input{
       display:flex;
       gap:8px;
@@ -1327,17 +1223,16 @@
     }
     .bot-input input:focus{border-color:var(--green)}
     .bot-input button{
-      width:43px;height:43px;
+      width:43px;
+      height:43px;
       border:none;
       border-radius:50%;
       background:var(--green);
       color:#fff;
-      cursor:pointer;
       font-weight:900;
       font-size:1rem;
     }
 
-    /* TOAST */
     .toast{
       position:fixed;
       left:50%;
@@ -1349,7 +1244,7 @@
       padding:11px 18px;
       font-weight:900;
       font-size:.86rem;
-      z-index:3500;
+      z-index:4500;
       opacity:0;
       pointer-events:none;
       transition:.25s;
@@ -1375,30 +1270,11 @@
       .bot-window{height:520px}
     }
 
-    @keyframes pulse{
-      0%,100%{opacity:1}
-      50%{opacity:.45}
-    }
-    @keyframes float{
-      0%,100%{transform:translateY(0)}
-      50%{transform:translateY(-12px)}
-    }
-    @keyframes float2{
-      0%,100%{transform:translateY(0)}
-      50%{transform:translateY(-8px)}
-    }
-    @keyframes orbit{
-      from{transform:rotate(0deg) translateX(10px) rotate(0deg)}
-      to{transform:rotate(360deg) translateX(10px) rotate(-360deg)}
-    }
-    @keyframes marquee{
-      from{transform:translateX(0)}
-      to{transform:translateX(-50%)}
-    }
-    @keyframes pop{
-      from{opacity:0;transform:scale(.9)}
-      to{opacity:1;transform:scale(1)}
-    }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    @keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    @keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
     @keyframes jarvisPulse{
       0%,100%{box-shadow:0 0 0 0 rgba(37,168,90,.35),0 16px 40px rgba(20,107,54,.35)}
       50%{box-shadow:0 0 0 12px rgba(37,168,90,0),0 16px 40px rgba(20,107,54,.35)}
@@ -1416,8 +1292,8 @@
       <p>VeztooX abhi sirf <strong>Muzaffarnagar city</strong> mein fresh sabzi aur fruits deliver karta hai.</p>
       <div class="area-badge">🏙️ Only Muzaffarnagar, UP</div>
       <div class="area-actions">
-        <button class="area-yes" onclick="confirmArea(true)">✅ Haan, main Muzaffarnagar mein hoon</button>
-        <button class="area-no" onclick="confirmArea(false)">❌ Nahi, main kisi aur city mein hoon</button>
+        <button class="area-yes" type="button" onclick="confirmArea(true)">✅ Haan, main Muzaffarnagar mein hoon</button>
+        <button class="area-no" type="button" onclick="confirmArea(false)">❌ Nahi, main kisi aur city mein hoon</button>
       </div>
     </div>
   </div>
@@ -1426,7 +1302,7 @@
     <div style="font-size:4rem">😔</div>
     <h2>Abhi Available Nahi</h2>
     <p>Hum abhi sirf Muzaffarnagar mein delivery karte hain. Jaldi hi aapke city mein bhi launch karenge.</p>
-    <button onclick="goBackArea()">← Wapas Jao</button>
+    <button type="button" onclick="goBackArea()">← Wapas Jao</button>
   </div>
 
   <!-- TOP -->
@@ -1456,11 +1332,7 @@
         <li><a href="#reviews">Reviews</a></li>
       </ul>
 
-      <div class="nav-actions">
-        <a class="wa-btn" id="navWa" target="_blank">
-          💬 <span>WhatsApp Order</span>
-        </a>
-      </div>
+      <a class="wa-btn" id="navWa" target="_blank">💬 <span>WhatsApp Order</span></a>
     </div>
   </header>
 
@@ -1476,7 +1348,7 @@
         </p>
         <div class="hero-actions">
           <a class="primary-btn" href="#products">🛒 Products Dekho</a>
-          <button class="ghost-btn" onclick="toggleBot(true)">🤖 Jarvis se Help Lo</button>
+          <button class="ghost-btn" type="button" onclick="toggleBot(true)">🤖 Jarvis se Help Lo</button>
         </div>
         <div class="hero-note">
           <span>📍 Muzaffarnagar Only</span>
@@ -1488,8 +1360,6 @@
       </div>
 
       <div class="hero-visual">
-        <div class="orb one"></div>
-        <div class="orb two"></div>
         <div class="mini-float a">🤖 Jarvis Assistant</div>
         <div class="mini-float b">🌿 Daily Fresh</div>
 
@@ -1544,11 +1414,11 @@
       </div>
 
       <div class="tabs">
-        <button class="tab active" onclick="filterCat('all',this)">🛒 Sab</button>
-        <button class="tab" onclick="filterCat('sabzi',this)">🥦 Sabzi</button>
-        <button class="tab" onclick="filterCat('fruit',this)">🍎 Fruits</button>
-        <button class="tab" onclick="filterCat('leafy',this)">🌿 Hara</button>
-        <button class="tab" onclick="filterCat('other',this)">🫙 Other</button>
+        <button class="tab active" type="button" onclick="filterCat('all',this)">🛒 Sab</button>
+        <button class="tab" type="button" onclick="filterCat('sabzi',this)">🥦 Sabzi</button>
+        <button class="tab" type="button" onclick="filterCat('fruit',this)">🍎 Fruits</button>
+        <button class="tab" type="button" onclick="filterCat('leafy',this)">🌿 Hara</button>
+        <button class="tab" type="button" onclick="filterCat('other',this)">🫙 Other</button>
       </div>
 
       <div class="product-grid" id="productGrid"></div>
@@ -1598,27 +1468,27 @@
       </div>
 
       <div class="steps">
-        <div class="step-card">
+        <div class="card">
           <div class="step-no">01</div>
-          <div class="step-icon">🛒</div>
+          <div class="card-icon">🛒</div>
           <h3>Cart Mein Add Karo</h3>
           <p>Jo products chahiye unhe cart mein add karo aur quantity set karo.</p>
         </div>
-        <div class="step-card">
+        <div class="card">
           <div class="step-no">02</div>
-          <div class="step-icon">🤖</div>
+          <div class="card-icon">🤖</div>
           <h3>Jarvis Se Help Lo</h3>
           <p>Rates, delivery area, products ya order ke liye Jarvis assistant se poochho.</p>
         </div>
-        <div class="step-card">
+        <div class="card">
           <div class="step-no">03</div>
-          <div class="step-icon">💬</div>
+          <div class="card-icon">💬</div>
           <h3>WhatsApp Pe Bhejo</h3>
           <p>Checkout button se full order automatically WhatsApp message mein chala jayega.</p>
         </div>
-        <div class="step-card">
+        <div class="card">
           <div class="step-no">04</div>
-          <div class="step-icon">💵</div>
+          <div class="card-icon">💵</div>
           <h3>COD / UPI Payment</h3>
           <p>Order confirm hone ke baad delivery par cash ya UPI payment karo.</p>
         </div>
@@ -1638,23 +1508,23 @@
       </div>
 
       <div class="why-grid">
-        <div class="why-card">
-          <div class="why-icon">🌅</div>
+        <div class="card">
+          <div class="card-icon">🌅</div>
           <h3>Roz Fresh Stock</h3>
           <p>Mandi se fresh stock aur same-day delivery ka focus.</p>
         </div>
-        <div class="why-card">
-          <div class="why-icon">⚖️</div>
+        <div class="card">
+          <div class="card-icon">⚖️</div>
           <h3>Sahi Wazan</h3>
           <p>Digital scale se proper weight aur clean packing.</p>
         </div>
-        <div class="why-card">
-          <div class="why-icon">💸</div>
+        <div class="card">
+          <div class="card-icon">💸</div>
           <h3>Clear Prices</h3>
           <p>Daily price update, hidden charges nahi. Delivery charge WhatsApp par confirm.</p>
         </div>
-        <div class="why-card">
-          <div class="why-icon">🤖</div>
+        <div class="card">
+          <div class="card-icon">🤖</div>
           <h3>Jarvis Assistant</h3>
           <p>Smart bot se rates, products, cart aur order help instantly.</p>
         </div>
@@ -1678,7 +1548,7 @@
   </section>
 
   <!-- FAQ -->
-  <section class="faq">
+  <section class="faq" style="background:#fff">
     <div class="container">
       <div class="section-head">
         <div>
@@ -1688,19 +1558,19 @@
       </div>
 
       <div class="faq-grid">
-        <div class="faq-card">
+        <div class="card">
           <h3>Delivery kaha hoti hai?</h3>
           <p>Abhi sirf Muzaffarnagar city areas mein delivery available hai.</p>
         </div>
-        <div class="faq-card">
+        <div class="card">
           <h3>Payment kaise hoga?</h3>
           <p>Cash on Delivery aur UPI dono available hain.</p>
         </div>
-        <div class="faq-card">
+        <div class="card">
           <h3>Prices kaise update honge?</h3>
           <p>Sirf prices.js file edit karo. Website par rates automatically update ho jayenge.</p>
         </div>
-        <div class="faq-card">
+        <div class="card">
           <h3>Jarvis kya help karega?</h3>
           <p>Jarvis products, rates, delivery, cart aur WhatsApp order mein guide karega.</p>
         </div>
@@ -1763,7 +1633,7 @@
   </footer>
 
   <!-- FLOAT BUTTONS -->
-  <button class="cart-fab" onclick="openCart()" aria-label="Open Cart">
+  <button class="cart-fab" type="button" onclick="openCart()" aria-label="Open Cart">
     🛒
     <span class="cart-count hide" id="cartCount">0</span>
   </button>
@@ -1781,25 +1651,25 @@
             <small>VeztooX Smart Help Bot</small>
           </div>
         </div>
-        <button class="bot-close" onclick="toggleBot(false)">×</button>
+        <button class="bot-close" type="button" onclick="toggleBot(false)">×</button>
       </div>
 
       <div class="bot-body" id="botBody"></div>
 
       <div class="quick">
-        <button onclick="quickAsk('Aaj ke rates batao')">Aaj ke rates</button>
-        <button onclick="quickAsk('Delivery area kya hai')">Delivery area</button>
-        <button onclick="quickAsk('Cart dikhao')">Cart</button>
-        <button onclick="quickAsk('Order kaise karu')">Order help</button>
+        <button type="button" onclick="quickAsk('Aaj ke rates batao')">Aaj ke rates</button>
+        <button type="button" onclick="quickAsk('Delivery area kya hai')">Delivery area</button>
+        <button type="button" onclick="quickAsk('Cart dikhao')">Cart</button>
+        <button type="button" onclick="quickAsk('Order kaise karu')">Order help</button>
       </div>
 
       <div class="bot-input">
         <input id="botInput" type="text" placeholder="Jarvis se poochho..." onkeydown="botKey(event)" />
-        <button onclick="sendBot()">➤</button>
+        <button type="button" onclick="sendBot()">➤</button>
       </div>
     </div>
 
-    <button class="jarvis-orb" onclick="toggleBot()" aria-label="Jarvis AI Bot">🤖</button>
+    <button class="jarvis-orb" type="button" onclick="toggleBot()" aria-label="Jarvis AI Bot">🤖</button>
   </div>
 
   <!-- CART MODAL -->
@@ -1807,7 +1677,7 @@
     <div class="sheet">
       <div class="sheet-head">
         <h2>🛒 Meri Cart</h2>
-        <button class="x-btn" onclick="closeCart()">×</button>
+        <button class="x-btn" type="button" onclick="closeCart()">×</button>
       </div>
       <div class="sheet-body" id="cartBody"></div>
       <div class="sheet-foot hide" id="cartFooter">
@@ -1819,8 +1689,8 @@
           <b id="cartTotal">₹0</b>
         </div>
         <div class="note">💡 Delivery charge WhatsApp par confirm hoga. Payment COD / UPI available.</div>
-        <button class="primary-btn" style="width:100%" onclick="openCheckout()">💬 WhatsApp Pe Order Bhejo</button>
-        <button class="clear-btn" onclick="clearCart()">🗑️ Cart Khali Karo</button>
+        <button class="primary-btn" type="button" style="width:100%" onclick="openCheckout()">💬 WhatsApp Pe Order Bhejo</button>
+        <button class="clear-btn" type="button" onclick="clearCart()">🗑️ Cart Khali Karo</button>
       </div>
     </div>
   </div>
@@ -1830,7 +1700,7 @@
     <div class="checkout-sheet">
       <div class="sheet-head" style="padding:0 0 16px;border-bottom:0">
         <h2>📦 Order Details</h2>
-        <button class="x-btn" onclick="closeCheckoutOnly()">×</button>
+        <button class="x-btn" type="button" onclick="closeCheckoutOnly()">×</button>
       </div>
 
       <div class="summary" id="checkoutSummary"></div>
@@ -1852,17 +1722,15 @@
 
       <div class="note">💵 Payment: Cash on Delivery / UPI</div>
 
-      <button class="primary-btn" style="width:100%" onclick="sendWhatsAppOrder()">💬 Final Order WhatsApp Pe Bhejo</button>
-      <button class="clear-btn" style="color:var(--muted)" onclick="backToCart()">← Wapas Cart Mein Jao</button>
+      <button class="primary-btn" type="button" style="width:100%" onclick="sendWhatsAppOrder()">💬 Final Order WhatsApp Pe Bhejo</button>
+      <button class="clear-btn" type="button" style="color:var(--muted)" onclick="backToCart()">← Wapas Cart Mein Jao</button>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
-    /* =========================
-       BASIC CONFIG
-    ========================== */
+    /* CONFIG */
     const WHATSAPP_NUMBER = "917409001208";
     const DEFAULT_WA_TEXT = "Hello VeztooX! Mujhe order karna hai. Aaj ka rate batao.";
 
@@ -1870,10 +1738,124 @@
       return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
     }
 
-    document.getElementById("navWa").href = waLink();
-    document.getElementById("ctaWa").href = waLink();
-    document.getElementById("floatWa").href = waLink();
-    document.getElementById("footerWa").href = waLink();
-    document.getElementById("areaWa").href = waLink("Kya aap mere area mein deliver karte ho? Mera area Muzaffarnagar mein hai.");
+    /* PRODUCTS */
+    const PRODUCTS = [
+      {id:'tamatar',emoji:'🍅',name:'Tomato / टमाटर',cat:'sabzi',unit:'kg',price:20,rateText:'₹20 /kg'},
+      {id:'aloo',emoji:'🥔',name:'Potato / आलू',cat:'sabzi',unit:'kg',price:30,rateText:'₹30 /kg'},
+      {id:'pyaz',emoji:'🧅',name:'Onion / प्याज',cat:'sabzi',unit:'kg',price:25,rateText:'₹25 /kg'},
+      {id:'gajar',emoji:'🥕',name:'Carrot / गाजर',cat:'sabzi',unit:'kg',price:30,rateText:'₹30 /kg'},
+      {id:'matar',emoji:'🫛',name:'Peas / मटर',cat:'sabzi',unit:'kg',price:60,rateText:'₹60 /kg'},
+      {id:'kheera',emoji:'🥒',name:'Cucumber / खीरा',cat:'sabzi',unit:'kg',price:20,rateText:'₹20 /kg'},
+      {id:'baingan',emoji:'🍆',name:'Brinjal / बैंगन',cat:'sabzi',unit:'kg',price:25,rateText:'₹25 /kg'},
+      {id:'hariMirch',emoji:'🌶️',name:'Green Chilli / हरी मिर्च',cat:'sabzi',unit:'100g',price:10,rateText:'₹10 /100g'},
 
-    /* =========================
+      {id:'kela',emoji:'🍌',name:'Banana / केला',cat:'fruit',unit:'dozen',price:50,rateText:'₹50 /dozen'},
+      {id:'seb',emoji:'🍎',name:'Apple / सेब',cat:'fruit',unit:'kg',price:120,rateText:'₹120 /kg'},
+      {id:'nimbu',emoji:'🍋',name:'Lemon / नींबू',cat:'fruit',unit:'piece',price:8,rateText:'₹8 /piece'},
+      {id:'angur',emoji:'🍇',name:'Grapes / अंगूर',cat:'fruit',unit:'kg',price:80,rateText:'₹80 /kg'},
+
+      {id:'dhaniya',emoji:'🌿',name:'Coriander / धनिया',cat:'leafy',unit:'guccha',price:8,rateText:'₹8 /guccha'},
+      {id:'palak',emoji:'🥬',name:'Spinach / पालक',cat:'leafy',unit:'bundle',price:20,rateText:'₹20 /bundle'},
+      {id:'methi',emoji:'🌱',name:'Fenugreek / मेथी',cat:'leafy',unit:'bundle',price:15,rateText:'₹15 /bundle'},
+      {id:'pudina',emoji:'🍃',name:'Mint / पुदीना',cat:'leafy',unit:'guccha',price:8,rateText:'₹8 /guccha'},
+
+      {id:'paani',emoji:'🫙',name:'Water Bottle / पानी',cat:'other',unit:'bottle',price:20,rateText:'₹20 /bottle'}
+    ];
+
+    let cart = {};
+
+    /* AREA CHECK */
+    function confirmArea(yes){
+      const areaOverlay = document.getElementById("areaOverlay");
+      const outsideMsg = document.getElementById("outsideMsg");
+
+      if(yes){
+        areaOverlay.style.display = "none";
+        outsideMsg.classList.remove("show");
+        try{sessionStorage.setItem("vzx_area_confirmed","yes")}catch(e){}
+      }else{
+        areaOverlay.style.display = "none";
+        outsideMsg.classList.add("show");
+      }
+    }
+
+    function goBackArea(){
+      document.getElementById("outsideMsg").classList.remove("show");
+      document.getElementById("areaOverlay").style.display = "flex";
+    }
+
+    /* PRICE LOAD */
+    function parsePrice(str){
+      if(!str) return null;
+      const match = String(str).match(/\d+(\.\d+)?/);
+      return match ? parseFloat(match[0]) : null;
+    }
+
+    function unitFromRate(str, fallback){
+      if(!str) return fallback;
+      const parts = String(str).split("/");
+      return parts[1] ? parts[1].trim() : fallback;
+    }
+
+    function loadPrices(){
+      try{
+        if(typeof VEZTOOX_PRICES === "undefined") throw new Error("prices.js missing");
+
+        const p = VEZTOOX_PRICES;
+        const date = p.lastUpdated || "Today";
+
+        document.getElementById("priceBar").innerHTML =
+          `📅 Aaj ke prices — <strong>${date}</strong> &nbsp;|&nbsp; Roz subah mandi se update 🌿`;
+        document.getElementById("priceDate").textContent = date;
+
+        PRODUCTS.forEach(prod=>{
+          if(p[prod.id]){
+            prod.rateText = p[prod.id];
+            const num = parsePrice(p[prod.id]);
+            if(num !== null) prod.price = num;
+            prod.unit = unitFromRate(p[prod.id], prod.unit);
+          }
+        });
+      }catch(e){
+        document.getElementById("priceBar").innerHTML =
+          "📅 Aaj ke prices — WhatsApp par confirm kar sakte hain!";
+      }
+    }
+
+    /* RENDER PRODUCTS */
+    function renderProducts(){
+      const grid = document.getElementById("productGrid");
+      grid.innerHTML = PRODUCTS.map(p=>`
+        <div class="product-card" data-cat="${p.cat}" id="card-${p.id}">
+          <span class="p-emoji">${p.emoji}</span>
+          <div class="p-name">${p.name}</div>
+          <div class="p-rate" id="rate-${p.id}">${p.rateText}</div>
+          <div id="action-${p.id}">
+            <button class="add-btn" type="button" onclick="addToCart('${p.id}')">🛒 Cart Mein Add Karo</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function refreshAllRates(){
+      PRODUCTS.forEach(p=>{
+        const el = document.getElementById("rate-" + p.id);
+        if(el) el.textContent = p.rateText;
+      });
+    }
+
+    function filterCat(cat, btn){
+      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+      btn.classList.add("active");
+
+      document.querySelectorAll(".product-card").forEach(card=>{
+        if(cat === "all" || card.dataset.cat === cat) card.classList.remove("hide");
+        else card.classList.add("hide");
+      });
+    }
+
+    /* CART */
+    function addToCart(id){
+      cart[id] = (cart[id] || 0) + 1;
+      refreshProductButton(id);
+      updateCartBadge
