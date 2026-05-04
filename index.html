@@ -179,104 +179,151 @@
 
     /* AREA POPUP */
     .area-overlay{
-      position:fixed;
-      inset:0;
-      z-index:4000;
-      background:rgba(0,0,0,.68);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      backdrop-filter:blur(9px);
-    }
-    .area-card{
-      width:min(420px,100%);
-      background:#fff;
-      border-radius:30px;
-      padding:32px 26px;
-      text-align:center;
-      box-shadow:0 28px 90px rgba(0,0,0,.35);
-      animation:pop .42s cubic-bezier(.34,1.56,.64,1);
-      position:relative;
-      overflow:hidden;
-    }
-    .area-card:before{
-      content:"";
-      position:absolute;
-      top:-80px;
-      right:-70px;
-      width:190px;
-      height:190px;
-      background:radial-gradient(circle,var(--green3),transparent 70%);
-      pointer-events:none;
-      z-index:0;
-    }
-    .area-card > *{position:relative;z-index:2}
-    .pin-big{font-size:3.4rem;margin-bottom:10px}
-    .area-card h2{
-      font-family:'Playfair Display',serif;
-      font-size:1.65rem;
-      color:var(--dark);
-      margin-bottom:8px;
-    }
-    .area-card p{
-      color:var(--muted);
-      line-height:1.65;
-      font-size:.95rem;
-      margin-bottom:18px;
-    }
-    .area-badge{
-      display:inline-flex;
-      background:var(--green3);
-      color:var(--green);
-      padding:8px 16px;
-      border-radius:999px;
-      font-weight:900;
-      font-size:.84rem;
-      margin-bottom:18px;
-    }
-    .area-actions{display:grid;gap:10px}
-    .area-yes,.area-no{
-      padding:13px;
-      border-radius:999px;
-      border:none;
-      font-weight:900;
-      transition:.2s;
-    }
-    .area-yes{background:var(--green);color:#fff}
-    .area-yes:hover{background:var(--green2)}
-    .area-no{background:#fff;color:var(--muted);border:2px solid #e8e8e8}
-    .area-no:hover{color:var(--orange);border-color:var(--orange)}
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:rgba(0,0,0,.65);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  backdrop-filter:blur(6px);
+}
 
-    .outside{
-      position:fixed;
-      inset:0;
-      z-index:4100;
-      background:linear-gradient(135deg,var(--orange),var(--orange2));
-      color:#fff;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      text-align:center;
-      padding:28px;
-    }
-    .outside.show{display:flex}
-    .outside h2{
-      font-family:'Playfair Display',serif;
-      font-size:2.3rem;
-      margin:12px 0 8px;
-    }
-    .outside p{max-width:430px;line-height:1.7;color:rgba(255,255,255,.85)}
-    .outside button{
-      margin-top:22px;
-      border:none;
-      background:#fff;
-      color:var(--orange);
-      padding:12px 24px;
-      border-radius:999px;
-      font-weight:900;
-    }
+.area-card{
+  width:min(420px,100%);
+  background:#fff;
+  border-radius:30px;
+  padding:32px 26px;
+  text-align:center;
+  box-shadow:0 28px 90px rgba(0,0,0,.35);
+  position:relative;
+  overflow:hidden;
+}
+
+.area-card::before{
+  content:"";
+  position:absolute;
+  top:-80px;
+  right:-70px;
+  width:190px;
+  height:190px;
+  background:radial-gradient(circle,#e8f8ee,transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.area-card > *{
+  position:relative;
+  z-index:2;
+}
+
+.pin-big{
+  font-size:3.4rem;
+  margin-bottom:10px;
+}
+
+.area-card h2{
+  font-size:2rem;
+  margin-bottom:10px;
+  color:#10170f;
+}
+
+.area-card p{
+  color:#6f7768;
+  line-height:1.7;
+  font-size:1rem;
+  margin-bottom:18px;
+}
+
+.area-badge{
+  display:inline-flex;
+  background:#e8f8ee;
+  color:#146b36;
+  padding:8px 16px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:.9rem;
+  margin-bottom:18px;
+}
+
+.area-actions{
+  display:grid;
+  gap:12px;
+}
+
+.area-yes,
+.area-no{
+  padding:15px 18px;
+  border-radius:999px;
+  border:none;
+  font-weight:800;
+  font-size:1rem;
+  cursor:pointer;
+  pointer-events:auto;
+  position:relative;
+  z-index:5;
+}
+
+.area-yes{
+  background:#146b36;
+  color:#fff;
+}
+
+.area-yes:hover{
+  background:#24a85a;
+}
+
+.area-no{
+  background:#fff;
+  color:#6f7768;
+  border:2px solid #e5e5e5;
+}
+
+.area-no:hover{
+  border-color:#ff7a1a;
+  color:#ff7a1a;
+}
+
+.outside{
+  position:fixed;
+  inset:0;
+  z-index:100000;
+  background:linear-gradient(135deg,#ff7a1a,#e65d00);
+  color:#fff;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  padding:28px;
+}
+
+.outside.show{
+  display:flex;
+}
+
+.outside h2{
+  font-size:2.2rem;
+  margin:12px 0 8px;
+}
+
+.outside p{
+  max-width:430px;
+  line-height:1.7;
+  color:rgba(255,255,255,.88);
+}
+
+.outside button{
+  margin-top:22px;
+  border:none;
+  background:#fff;
+  color:#ff7a1a;
+  padding:12px 24px;
+  border-radius:999px;
+  font-weight:900;
+  cursor:pointer;
+}
 
     /* HERO */
     .hero{
@@ -1286,17 +1333,30 @@
 
   <!-- AREA CHECK -->
   <div class="area-overlay" id="areaOverlay">
-    <div class="area-card">
-      <div class="pin-big">📍</div>
-      <h2>Delivery Area Check</h2>
-      <p>VeztooX abhi sirf <strong>Muzaffarnagar city</strong> mein fresh sabzi aur fruits deliver karta hai.</p>
-      <div class="area-badge">🏙️ Only Muzaffarnagar, UP</div>
-      <div class="area-actions">
-        <button class="area-yes" type="button" onclick="confirmArea(true)">✅ Haan, main Muzaffarnagar mein hoon</button>
-        <button class="area-no" type="button" onclick="confirmArea(false)">❌ Nahi, main kisi aur city mein hoon</button>
-      </div>
+  <div class="area-card">
+    <div class="pin-big">📍</div>
+    <h2>Delivery Area Check</h2>
+    <p>VeztooX abhi sirf <strong>Muzaffarnagar city</strong> mein fresh sabzi aur fruits deliver karta hai.</p>
+    <div class="area-badge">🏙️ Only Muzaffarnagar, UP</div>
+
+    <div class="area-actions">
+      <button class="area-yes" id="areaYesBtn" type="button">
+        ✅ Haan, main Muzaffarnagar mein hoon
+      </button>
+
+      <button class="area-no" id="areaNoBtn" type="button">
+        ❌ Nahi, main kisi aur city mein hoon
+      </button>
     </div>
   </div>
+</div>
+
+<div class="outside" id="outsideMsg">
+  <div style="font-size:4rem">😔</div>
+  <h2>Abhi Available Nahi</h2>
+  <p>Hum abhi sirf Muzaffarnagar mein delivery karte hain. Jaldi hi aapke city mein bhi launch karenge.</p>
+  <button id="goBackAreaBtn" type="button">← Wapas Jao</button>
+</div>
 
   <div class="outside" id="outsideMsg">
     <div style="font-size:4rem">😔</div>
@@ -1764,25 +1824,6 @@
 
     let cart = {};
 
-    /* AREA CHECK */
-    function confirmArea(yes){
-      const areaOverlay = document.getElementById("areaOverlay");
-      const outsideMsg = document.getElementById("outsideMsg");
-
-      if(yes){
-        areaOverlay.style.display = "none";
-        outsideMsg.classList.remove("show");
-        try{sessionStorage.setItem("vzx_area_confirmed","yes")}catch(e){}
-      }else{
-        areaOverlay.style.display = "none";
-        outsideMsg.classList.add("show");
-      }
-    }
-
-    function goBackArea(){
-      document.getElementById("outsideMsg").classList.remove("show");
-      document.getElementById("areaOverlay").style.display = "flex";
-    }
 
     /* PRICE LOAD */
     function parsePrice(str){
